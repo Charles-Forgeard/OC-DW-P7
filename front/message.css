@@ -1,0 +1,169 @@
+.carte{
+    display: flex;
+    gap: 10px;
+    position: relative;
+}
+
+.msg-toggle-menu{
+    position: absolute;
+    display:flex;
+    flex-direction: column;
+    align-items: flex-end;
+    top:0;
+    right:0;
+}
+
+.ellipsis-icon{
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url('../img/icons/ellipsis.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.dropdown-menu{
+    position: relative;
+}
+
+.dropdown-item{
+    --bs-dropdown-link-hover-bg: #FFD7D7;
+}
+
+.carte *{
+    margin: 0px;
+}
+
+.carte_body{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.carte h5{
+    font-size: 1.5rem;
+}
+
+.carte_message{
+    position: relative;
+    line-height: 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.carte_message .seeMore, .carte_message .seeLess{
+    position: absolute;
+    background-color: white;
+    padding-left: 5px;
+    display: none;
+    height: 1.5rem;
+    bottom: 0;
+    right: 0;
+   }
+
+.clamp-text-overflow{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    text-overflow: ellipsis;
+}
+
+.avatar-picture{
+    color: grey;
+    height: 64px;
+    width: 64px;
+}
+
+.avatar-img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.carte_date_publication, .carte_date_modification{
+    color: grey;
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 1rem;
+}
+
+.carte_btns{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+}
+
+.carte_btns a{
+    text-decoration: none;
+    position: relative;
+}
+
+.carte_images{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.carte_images picture{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.carte_images img{
+    display: block;
+    background-color: white;
+    box-shadow: 7px 3.5px 3.5px rgba(0,0,0,0.8);
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.carte_images a{
+    display: block;
+    width: 100px;
+    height: 100px;
+}
+
+.carte_images a:hover{
+    z-index: 1;
+}
+
+.carte_images a:hover img{
+    box-shadow: 20px 10px 10px rgba(0,0,0,0.5);
+    width: 200%;
+    height: 200%;
+}
+
+.heart-btn{
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+
+.heart-container{
+    position: relative;
+}
+
+.Like_count, .Comment_count{
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(+100%,-50%);
+    color: white;
+    background-color: #FFD7D7;
+    border-radius: 10px;
+    padding: 0 5px;
+}

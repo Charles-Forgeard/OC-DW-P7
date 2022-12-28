@@ -1,0 +1,83 @@
+body{
+    font-family: 'Lato', sans-serif;
+}
+
+#main > div, #attendees_view{
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+#main > div{
+    flex-grow: 1;
+}
+
+#attendees_view{
+    flex-shrink: 0;
+}
+
+::-webkit-scrollbar {
+    width: .45rem;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #FFD7D7;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-track{
+    background: transparent;
+}
+
+.carte, .attendee{
+    border-top: 3px solid #FFD7D7;
+    padding: 10px 0;
+    margin: 0
+}
+
+.carte:first-child{
+ border: none;
+}
+
+header .logo-img{
+    width: 30%;
+    min-width: 200px;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#header-btns{
+    display: flex;
+    margin: 0;
+    gap: 10px;
+    list-style-type: none;
+}
+
+#main{
+    display: flex;
+    gap: 15px;
+}
+
+.imgPreview{
+    max-height: 100px
+}
+
+#add-img-input{
+    height: 32px;
+    width: 32px;
+    background-image: url('../img/icons/add-img.svg');
+    background-size: cover;
+    background-color: white;
+    cursor: pointer
+}
+
+input[type="file"] {
+    display: none;
+}
+
+*:focus-visible{
+    border: 3px dashed red !important;
+}
+
+

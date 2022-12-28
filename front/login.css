@@ -1,0 +1,11 @@
+.eye-icon-hide{
+    background-image: url('../img/icons/eye-off.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.eye-icon-show{
+    background-image: url('../img/icons/eye.svg');
+}
