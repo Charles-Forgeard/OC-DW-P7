@@ -22,6 +22,24 @@ Pour ce qui est de l'identité graphique:  - l'utilisation de la police d'écrit
 
 - Un compte d'admin doit être mis en place. Il poura assurer la modération des posts.
 
+## Installer le projet
+
+### `[Installer Node.js](https://nodejs.org/fr/)`
+
+Pour executer ce projet vous devez avoir Node.js installé sur votre machine. (Voir [Node.js](https://nodejs.org/fr/))
+
+### `git clone https://github.com/Charles-Forgeard/OC-DW-P7.git`
+
+Clonez ce repo git sur votre machine. Pour ce faire, exécutez cette commande dans un terminal.
+
+### `npm run start`
+
+Démarrer le serveur en executant cette commande dans un terminal dans le dossier racine.
+
+### `http://localhost:3000/`
+
+Ouvrer vatre navigateur Web et aller à cette adresse.
+
 ## Auteur(s)
 
 **Charles Forgeard** [Charles-Forgeard](https://github.com/Charles-Forgeard)
