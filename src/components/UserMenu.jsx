@@ -2,6 +2,7 @@ import UserContext from './UserContext.jsx'
 import UserOptionsMenu from './UserOptionsMenu'
 import useToggle from './useToggle.jsx';
 import socket from '../index.js'
+import onClickOutside from './useClickOutSide'
 
 import React, { useState, useContext, createRef, useEffect, useRef, Fragment} from 'react';
 import {render} from 'react-dom';
@@ -9,7 +10,7 @@ import {render} from 'react-dom';
 function UserMenu(){
     const user = useContext(UserContext)
     const avatar_picture_url = user.profile_picture_url === 'default_url_avatar_picture' ? 'img/person.svg' : user.profile_picture_url
-    const [showMenu, toggleMenu] = useToggle(false)
+    const [showMenu, toggleMenu, setShowMenu] = useToggle(false)
     const firstItem = createRef()
     const userMenu = useRef(null)
 
@@ -61,6 +62,17 @@ function UserMenu(){
         }
     }
 
+    onClickOutside({elementId: 'header-btns', callback: ()=>{
+        console.log('ici')
+        setShowMenu(showMenu =>{
+            console.log('showMenu ', showMenu)
+            if(showMenu){
+                toggleMenu()
+            }
+            return showMenu
+        })
+    }})
+
 
     return <Fragment>
 
@@ -73,7 +85,7 @@ function UserMenu(){
             </picture>
         </button>
 
-        {showMenu && <ul className="p-0 d-block position-absolute top-100 end-0 bg-white rounded border border-primary shadow dropdown-menu" role="menu" onMouseLeave={toggleMenu} onKeyDown={onEscapeKeyToggleMenu}>
+        {showMenu && <ul className="p-0 d-block position-absolute top-100 end-0 bg-white rounded border border-primary shadow dropdown-menu" role="menu" onMouseLeave={toggleMenu} onKeyDown={onEscapeKeyToggleMenu} onBlur={console.log('blur')}>
             <li className="dropdown-item" role="presentation">
                 <a href="#" role="menuitem" onClick={onClickToggleUserOptionsMenu} ref={firstItem} className="text-decoration-none" onKeyDown={onEnterKeyClick}>{user.is_admin ? 'Action administrateur' : 'Paramètres utilisateur'}</a>
             </li>
@@ -82,7 +94,7 @@ function UserMenu(){
             </li>
         </ul>}
     </Fragment>
-    
+
 }
 
 export default UserMenu
