@@ -24,7 +24,7 @@ Pour ce qui est de l'identité graphique:  - l'utilisation de la police d'écrit
 
 ## Installer le projet
 
-### `[Installer Node.js](https://nodejs.org/fr/)`
+### [Installer Node.js](https://nodejs.org/fr/)
 
 Pour executer ce projet vous devez avoir Node.js installé sur votre machine. (Voir [Node.js](https://nodejs.org/fr/))
 
@@ -36,7 +36,7 @@ Clonez ce repo git sur votre machine. Pour ce faire, exécutez cette commande da
 
 Démarrer le serveur en executant cette commande dans un terminal dans le dossier racine.
 
-### `http://localhost:3000/`
+### [http://localhost:3000/](http://localhost:3000/)
 
 Ouvrer vatre navigateur Web et aller à cette adresse.
 
