@@ -32,6 +32,11 @@ Pour executer ce projet vous devez avoir Node.js installé sur votre machine. (V
 
 Clonez ce repo git sur votre machine. Pour ce faire, exécutez cette commande dans un terminal.
 
+### `.env.example -> .env`
+
+Renommer le fichier '.env.example' en '.env'. Pour cette version d'exemple une clé de cryptage y est configurée. Elle doit être changée lors de la mise en production. 
+Cette version permet l'accès au compte administrateur. Ce compte devra être recréé une fois la clé de cryptage reconfigurée avant mise en production.
+
 ### `npm run start`
 
 Démarrer le serveur en executant cette commande dans un terminal dans le dossier racine.
