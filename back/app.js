@@ -18,7 +18,7 @@ app.use(session({
     saveUninitialized: false,
     store: new SQLiteStore({
         dir: './dataBase',
-        db: 'db'
+        db: 'db.sqlite'
     })
 }))
 

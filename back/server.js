@@ -37,7 +37,7 @@ io.of("/socket/").use(wrap(
         saveUninitialized: false,
         store: new SQLiteStore({
             dir: './dataBase',
-            db: 'db'
+            db: 'db.sqlite'
         })
     })
 ))
