@@ -9,7 +9,8 @@ function useToggle(boolean){
 
     return [
         isTrue,
-        toggle
+        toggle,
+        setBoolean
     ]
 }
 
