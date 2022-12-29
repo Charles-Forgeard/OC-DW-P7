@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# Application intranet de Groupomania
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ce projet de création de réseau social interne à l'entreprise Groupomania a pour but de répondre aux besoins communs du personnel de l'entreprise en leur proposant un moyen de se connâitre dans un cadre plus informel. 
 
-## Available Scripts
+## Spécifications techniques
 
-In the project directory, you can run:
+Au niveau des technologies utilisées, seule l'utilisation d'un framework front-end Javascript est exigée.
 
-### `npm start`
+Pour ce qui est de l'identité graphique:  - l'utilisation de la police d'écriture "Lato" est requise 
+                                          - une palette chromatique en accord avec l'identité de la marque doit être utilisée
+                                          - des visuels du logo de la marque sont également fournis
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Spécifications fonctionnelles
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Mettre en place un système de session où les données de connexion sont sécurisée, l'utilisateur peut se connecter / déconnecter, la session persiste jusqu'à déconnection.
 
-### `npm test`
+- La page d'acceul doit afficher les posts de façon antéchronologique.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Un utilisateur doit pouvoir créer, modifier, supprimer ses posts qui doivent pouvoir contenir du texte et une image.
 
-### `npm run build`
+- Les posts doivent pouvoir être "likés", une seule fois par utilisateur.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Un compte d'admin doit être mis en place. Il poura assurer la modération des posts.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installer le projet
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `[Installer Node.js](https://nodejs.org/fr/)`
 
-### `npm run eject`
+Pour executer ce projet vous devez avoir Node.js installé sur votre machine. (Voir [Node.js](https://nodejs.org/fr/))
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### `git clone https://github.com/Charles-Forgeard/OC-DW-P7.git`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Clonez ce repo git sur votre machine. Pour ce faire, exécutez cette commande dans un terminal.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### `npm run start`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Démarrer le serveur en executant cette commande dans un terminal dans le dossier racine.
 
-## Learn More
+### `http://localhost:3000/`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Ouvrer vatre navigateur Web et aller à cette adresse.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Auteur(s)
 
-### Code Splitting
+**Charles Forgeard** [Charles-Forgeard](https://github.com/Charles-Forgeard)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## License
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Ce projet et libre et peut-être utilisé par tout à chacun: GNU GLP-3.0 License
+0 comments on commit bcf48ea
+Please sign in to comment.
+Footer
+© 2022 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
