@@ -42,7 +42,7 @@ Ouvrer vatre navigateur Web et aller à cette adresse.
 
 ## Auteur(s)
 
-**Charles Forgeard** [Charles-Forgeard](https://github.com/Charles-Forgeard)
+**[Charles-Forgeard](https://github.com/Charles-Forgeard)**
 
 ## License
 
