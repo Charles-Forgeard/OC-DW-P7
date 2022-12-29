@@ -1,7 +1,15 @@
-const {writeFile, unlink} = require('fs')
+const {writeFile, unlink, existsSync, mkdirSync} = require('fs')
 const logger = require('../../logger/console-dev')();
+const path = require('path')
+
+
 
 exports.writeFile = (url, file)=>{
+    const dir = url.split('/').slice(0,-1).join('/')
+    logger.warn(`dir: ${dir}`)
+    if (!existsSync(path.join(__dirname, '../../', dir))){
+        mkdirSync(path.join(__dirname, '../../', dir));
+    }
     return new Promise((resolve, reject)=>{
         writeFile(url, file, err=>{
             if(err){
