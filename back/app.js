@@ -25,11 +25,11 @@ app.use(session({
 app.get('/', (req, res)=>{
     logger.info(config.accessControlByAdmin,'ACCESS_CONTROL_BY_ADMIN')
     config.accessControlByAdmin ?
-    res.status(200).sendFile(path.join(__dirname, '..', '/front/login.html')) : 
+    res.status(200).sendFile(path.join(__dirname, '..', '/build/index.html')) : 
     res.status(200).sendFile(path.join(__dirname, '..', '/front/login-register.html'))
 })
 app.use('/', express.static(path.join(__dirname, '..','/front')))
-app.use('/static/js/', express.static(path.join(__dirname, '..', '/front')))
+app.use('/static/js/', express.static(path.join(__dirname, '..', '/build/static/js/')))
 
 app.use('/auth', authRoute);
 

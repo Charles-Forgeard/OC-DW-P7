@@ -164,7 +164,7 @@ exports.emailToAdmin = (req, res)=>{
         })
         .catch(err=>{
             logger.error(err)
-            res.status(500).json({message: "Erreur interne, veuillez contacter l'administrateur du config.siteDomain."})
+            res.status(500).json({message: `Erreur interne, veuillez contacter l'administrateur de ${config.siteDomain}.`})
         })
 }
 

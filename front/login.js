@@ -26,7 +26,7 @@ loginBtn.addEventListener('click', event =>{
     }
     console.log(window.location.origin);
 
-    fetch(window.location.origin + 'auth/login', fetchOptions)
+    fetch(window.location.origin + '/auth/login', fetchOptions)
     .then(res => res.json())
     .then(({message}) =>{
         if(message === 'User account is active'){
