@@ -1,16 +1,22 @@
 # Application intranet de Groupomania
 
-Ce projet de création de réseau social interne à l'entreprise Groupomania a pour but de répondre aux besoins communs du personnel de l'entreprise en leur proposant un moyen de se connâitre dans un cadre plus informel.
+Ce projet de réseau social interne à Groupomania a pour but de répondre aux besoins communs du personnel de l'entreprise en leur proposant un moyen de se connaître dans un cadre plus informel.
 
 ## Spécifications techniques
 
 Au niveau des technologies utilisées, seule l'utilisation d'un framework front-end Javascript est exigée.
 
-Pour ce qui est de l'identité graphique: - l'utilisation de la police d'écriture "Lato" est requise - une palette chromatique en accord avec l'identité de la marque doit être utilisée - des visuels du logo de la marque sont également fournis
+Pour ce qui est de l'identité graphique:
+
+- La police d'écriture "Lato" est requise.
+
+- Une palette chromatique en accord avec l'identité visuelle de la marque.
+
+- Des visuels du logo de la marque sont également fournis.
 
 ## Spécifications fonctionnelles
 
-- Mettre en place un système de session où les données de connexion sont sécurisée, l'utilisateur peut se connecter / déconnecter, la session persiste jusqu'à déconnection.
+- Mettre en place un système de session où les données de connexion sont sécurisées. l'utilisateur peut se connecter / déconnecter. La session persiste jusqu'à déconnection.
 
 - La page d'accueil doit afficher les posts de façon antéchronologique.
 
@@ -34,23 +40,22 @@ Clonez ce repo git sur votre machine. Pour ce faire, exécutez cette commande da
 
 Renommer le fichier '/back/.env.example' en '/back/.env'.
 
-Pour cette version d'exemple, une clé de cryptage des emails en base de données y est configurée. **Elle doit être changée lors de la mise en production** (pour obtenir une nouvelle clé ouvrer votre terminal dans le dossier '/back' et executer la commande: `npm run newKey`)
+Pour cette version d'exemple, une clé de cryptage des emails en base de données y est configurée. **Elle doit être changée lors de la mise en production** (pour obtenir une nouvelle clé ouvrez votre terminal dans le dossier '/back' et executez la commande: `npm run newKey`)
 
 Cette version permet de se loguer avec le compte administrateur.
 Ce compte devra être recréé une fois la clé de cryptage reconfigurée avant mise en production.
-Pour des raisons de sécurité, le compte administrateur ne peut être créé qu'en intervenant idrectement sur la base de données.
 
 ### `npm run install` puis `npm run dev` dans dossier **/back**
 
-Installer et démarrer le serveur servant l'api et le socket en local, executez cette commande dans un terminal dans le dossier **'/back'**.
+Installez et démarrez le serveur servant l'api et le socket en local, executez cette commande dans un terminal dans le dossier **'/back'**.
 
 ### `npm run install` puis `npm run dev` dans dossier **/front**
 
-Installer et démarrer le serveur servant l'app react, executez cette commande dans un terminal dans le dossier **'/front'**.
+Installez et démarrez le serveur servant l'app react, executez cette commande dans un terminal dans le dossier **'/front'**.
 
-### `Aller à` [http://localhost:3001/](http://localhost:3001/)
+### `Allez à` [http://localhost:3001/](http://localhost:3001/)
 
-Ouvrer votre navigateur Web et aller à cette adresse.
+Ouvrez votre navigateur Web et allez à cette adresse.
 
 ### `Créer un compte utilisateur` ou `utiliser le compte admin`
 
@@ -69,7 +74,7 @@ Password: Motdepassàchanger!§\\\*1
 
 **A minima, changer le mot de passe administrateur à l'aide de l'interface adminstrateur**
 Vous pouvez y accéder en cliquant sur l'icône utilisateur en haut à droite de la page une fois logué.
-Mais dans ce cas, la clé pour décrypter les email de la base de donnée est exposée dans ce repo.
+Mais dans ce cas, la clé pour décrypter les email de la base de données est exposée dans ce repo.
 
 ## Auteur(s)
 
