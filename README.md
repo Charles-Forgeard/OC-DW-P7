@@ -70,7 +70,7 @@ Si l'option de création de compte n'est pas disponible, assurez vous que le fic
 
 Pour faciliter le test de ce projet, voici les identifiants administrateurs préconfigurés:
 ID: admin.reseau.social@groupomania.com
-Password: Motdepassàchanger!§\\\*1
+Password: Motdepassàchanger!§\*1
 
 **A minima, changer le mot de passe administrateur à l'aide de l'interface adminstrateur**
 Vous pouvez y accéder en cliquant sur l'icône utilisateur en haut à droite de la page une fois logué.
