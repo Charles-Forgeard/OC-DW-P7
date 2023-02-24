@@ -32,7 +32,7 @@ Clonez ce repo git sur votre machine. Pour ce faire, exécutez cette commande da
 
 ### `.env.example -> .env`
 
-Renommer le fichier '.env.example' en '.env'.
+Renommer le fichier '/back/.env.example' en '/back/.env'.
 
 Pour cette version d'exemple, une clé de cryptage des emails en base de données y est configurée. **Elle doit être changée lors de la mise en production** (pour obtenir une nouvelle clé ouvrer votre terminal dans le dossier '/back' et executer la commande: `npm run newKey`)
 
@@ -40,15 +40,15 @@ Cette version permet de se loguer avec le compte administrateur.
 Ce compte devra être recréé une fois la clé de cryptage reconfigurée avant mise en production.
 Pour des raisons de sécurité, le compte administrateur ne peut être créé qu'en intervenant idrectement sur la base de données.
 
-### `npm run install` puis `npm run dev` dans fichier **/back**
+### `npm run install` puis `npm run dev` dans dossier **/back**
 
 Installer et démarrer le serveur servant l'api et le socket en local, executez cette commande dans un terminal dans le dossier **'/back'**.
 
-### `npm run install` puis `npm run dev` dans fichier **/front**
+### `npm run install` puis `npm run dev` dans dossier **/front**
 
 Installer et démarrer le serveur servant l'app react, executez cette commande dans un terminal dans le dossier **'/front'**.
 
-### [http://localhost:3001/](http://localhost:3001/)
+### `Aller à` [http://localhost:3001/](http://localhost:3001/)
 
 Ouvrer votre navigateur Web et aller à cette adresse.
 
