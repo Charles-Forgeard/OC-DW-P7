@@ -11,8 +11,11 @@ lerna-debug.log*
 node_modules
 
 # privates users files
-private/users/*
-private/messages/*
+/private/users/*
+!/private/users/.gitkeep
+/private/messages/*
+!/private/messages/.gitkeep
+
 
 # Editor directories and files
 .vscode/*
