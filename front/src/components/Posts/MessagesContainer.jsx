@@ -1,9 +1,10 @@
 import Message from './Message.jsx'
 import Dialog from '../Atoms/Dialog/Dialog'
 import ConfirmForm from '../Atoms/Form/ConfirmForm.jsx'
-import React, { useEffect, Fragment, useContext } from 'react'
+import { useEffect, Fragment, useContext } from 'react'
 import { SocketContext } from '../Contexts/SocketContext'
 import { UserContext } from '../Contexts/UserContext'
+import useModal from '../../hooks/useModal'
 
 function MessagesContainer({
   state,
@@ -13,6 +14,8 @@ function MessagesContainer({
 }) {
   const socket = useContext(SocketContext)
   const user = useContext(UserContext)
+
+  const { info } = useModal()
 
   useEffect(() => {
     socket.on('msg:create', ({ status, message, initBy, errMessage }) => {
@@ -44,11 +47,15 @@ function MessagesContainer({
 
       if (!errMessage) dispatch({ type: 'updateMessage', payload: updates })
       if (initBy === user.id)
-        dispatchModalState({
-          type: 'openModal',
-          modal: 'response',
+        info({
+          title: 'Mise à jour du post',
           message: errMessage ?? 'mise à jour du post réussie',
         })
+      // dispatchModalState({
+      //   type: 'openModal',
+      //   modal: 'response',
+      //   message: errMessage ?? 'mise à jour du post réussie',
+      // })
     })
     return () => socket.off('msg:update')
   }, [socket, dispatch, dispatchModalState, user.id])
@@ -108,7 +115,7 @@ function MessagesContainer({
     dispatchModalState({ type: 'reset' })
   }
 
-  function onClickDeleteMsg(event) {
+  function onClickDeleteMsg() {
     socket.emit('msg:delete', modalState.message.id)
   }
 

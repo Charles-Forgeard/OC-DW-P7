@@ -13,6 +13,7 @@ import UpdatePostForm from './components/Posts/UpdatePost/UpdatePostForm'
 import UserOptionsMenu from './components/UserMenu/UserOptions/UserOptionsMenu'
 import AdminOptionsMenu from './components/UserMenu/AdminOptions/AdminOptionsMenu'
 import { GetUserContext } from './components/Contexts/UserContext'
+import { ProvideModalContext } from './components/Contexts/ModalContext'
 import socket from './socket/socket'
 import './style/bootstrap.css'
 
@@ -55,6 +56,8 @@ const router = createBrowserRouter([
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ProvideModalContext>
+      <RouterProvider router={router} />
+    </ProvideModalContext>
   </React.StrictMode>
 )

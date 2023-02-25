@@ -1,4 +1,4 @@
-import useToggle from '../../hooks/useToggle.jsx'
+import useToggle from '../../hooks/useToggle.js'
 import EllipsisSvg from '../Atoms/Icons/EllipsisSvg'
 import { Link } from 'react-router-dom'
 
@@ -20,7 +20,7 @@ function MessageOptionsToggleMenu({ message, dispatchModalState }) {
     toggleMenu()
   }
 
-  function onClickShowUpdateMenu(event) {
+  function onClickShowUpdateMenu() {
     toggleMenu()
   }
 

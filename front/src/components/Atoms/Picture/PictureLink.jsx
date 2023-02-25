@@ -1,6 +1,6 @@
 import Picture from './Picture'
 import { Fragment } from 'react'
-import useToggle from '../../../hooks/useToggle.jsx'
+import useToggle from '../../../hooks/useToggle.js'
 
 function PictureLink({ url, altText, id, onClick, formats }) {
   const [isShow, toggleShow] = useToggle(true)

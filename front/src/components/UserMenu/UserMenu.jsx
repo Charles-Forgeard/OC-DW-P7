@@ -1,5 +1,5 @@
 import { UserContext } from '../Contexts/UserContext.jsx'
-import useToggle from '../../hooks/useToggle.jsx'
+import useToggle from '../../hooks/useToggle.js'
 import { SocketContext } from '../Contexts/SocketContext'
 import onClickOutside from '../../hooks/useClickOutSide'
 import { host, apiPort } from '../../../config'
