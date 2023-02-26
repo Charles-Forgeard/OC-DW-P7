@@ -5,7 +5,7 @@ import { useContext } from 'react'
 import useModal from '../../hooks/useModal'
 import { SocketContext } from '../Contexts/SocketContext'
 
-function MessageOptionsToggleMenu({ message, dispatchModalState }) {
+function MessageOptionsToggleMenu({ message }) {
   const [showMenu, toggleMenu] = useToggle(false)
 
   const socket = useContext(SocketContext)
@@ -17,24 +17,17 @@ function MessageOptionsToggleMenu({ message, dispatchModalState }) {
     toggleMenu()
   }
 
-  function onClickShowDeleteModal(event) {
+  async function onClickShowDeleteModal(event) {
     event.preventDefault()
-    // Todo add confirmModal with callback
-    confirm({
-      title: 'Suppression du post',
-      message:
-        'En confirmant la suppression, le post sera définitivement supprimé.',
-      callback: () => socket.emit('msg:delete', message.id),
-    })
-    dispatchModalState({
-      type: 'openModal',
-      modal: 'deleteModal',
-      message: message,
-    })
-    toggleMenu()
-  }
-
-  function onClickShowUpdateMenu() {
+    if (
+      await confirm({
+        title: 'Suppression du post',
+        message:
+          'En confirmant la suppression, le post sera définitivement supprimé.',
+      })
+    ) {
+      socket.emit('msg:delete', message.id)
+    }
     toggleMenu()
   }
 
@@ -67,7 +60,7 @@ function MessageOptionsToggleMenu({ message, dispatchModalState }) {
               to="updatePost"
               state={{ message: message, sendMsgUpdates: 2 }}
               className="dropdown-item text-primary"
-              onClick={onClickShowUpdateMenu}
+              onClick={onClickToggleMenu}
             >
               Modifier
             </Link>

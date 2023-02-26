@@ -20,12 +20,13 @@ function ConfirmModal() {
 
   function onClickConfirm(event) {
     event.preventDefault()
-    resolveRef.current(modalProps.callback())
+    resolveRef.current(true)
     setOpen(false)
   }
 
   function onClickCancel(event) {
     event.preventDefault()
+    resolveRef.current(false)
     setOpen(false)
   }
 
