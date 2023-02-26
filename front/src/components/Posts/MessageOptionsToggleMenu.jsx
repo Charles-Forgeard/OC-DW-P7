@@ -1,9 +1,16 @@
 import useToggle from '../../hooks/useToggle.js'
 import EllipsisSvg from '../Atoms/Icons/EllipsisSvg'
 import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import useModal from '../../hooks/useModal'
+import { SocketContext } from '../Contexts/SocketContext'
 
 function MessageOptionsToggleMenu({ message, dispatchModalState }) {
   const [showMenu, toggleMenu] = useToggle(false)
+
+  const socket = useContext(SocketContext)
+
+  const { confirm } = useModal()
 
   function onClickToggleMenu(event) {
     event.preventDefault()
@@ -12,6 +19,13 @@ function MessageOptionsToggleMenu({ message, dispatchModalState }) {
 
   function onClickShowDeleteModal(event) {
     event.preventDefault()
+    // Todo add confirmModal with callback
+    confirm({
+      title: 'Suppression du post',
+      message:
+        'En confirmant la suppression, le post sera définitivement supprimé.',
+      callback: () => socket.emit('msg:delete', message.id),
+    })
     dispatchModalState({
       type: 'openModal',
       modal: 'deleteModal',

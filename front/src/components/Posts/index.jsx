@@ -15,7 +15,9 @@ import {
   useCallback,
   useReducer,
 } from 'react'
+import useModal from '../../hooks/useModal'
 
+// Todo delete reducer logic after useModal is fully implemented
 const initValue = () => {
   return { modal: null, message: null, scrollYPos: undefined }
 }
@@ -44,7 +46,9 @@ function Posts() {
 
   const intersectorObject = useRef(null)
 
+  // Todo delete reducer logic after useModal is fully implemented
   const [modalState, dispatchModalState] = useReducer(reducer, initValue)
+  const { info } = useModal()
 
   const [isLoading, setLoading] = useState(false)
 
@@ -84,11 +88,11 @@ function Posts() {
       } catch (err) {
         console.error(err)
         setFetchPermission(false)
-        dispatchModalState({
-          type: 'openModal',
-          modal: 'response',
-          message:
-            "Échec du chargement des nouveaux messages. Si le problème persiste, merci de contacter l'administrateur",
+        info({
+          title: 'Nouveaux posts',
+          errMessage:
+            "Échec du chargement des nouveaux posts. Si le problème persiste, merci de contacter l'administrateur",
+          styleOption: 'danger',
         })
       }
       setLoading(false)
@@ -97,11 +101,8 @@ function Posts() {
 
   const secondCallBackFunction = useCallback(
     async (entries) => {
-      console.log('intersectionObserver used')
       if (entries[0].isIntersecting) {
         await fetchGetMessages()
-        // const response = await fetch({state.nbMessages, limit=10})
-        // dispatch({type:"addMessages", payload:  response.data});
         console.log('Intersecting')
       }
     },
@@ -126,23 +127,8 @@ function Posts() {
     }
   }, [intersectorObject, options, secondCallBackFunction, observer])
 
-  function onScroll(event) {
-    event.preventDefault()
-    modalState.scrollYPos
-      ? (event.target.scrollTop = modalState.scrollYPos)
-      : dispatchModalState({
-          type: 'setScrollYPos',
-          scrollYPos: event.target.scrollTop,
-        })
-  }
-
-  function onCloseModal(event) {
-    event.preventDefault()
-    dispatchModalState({ type: 'reset' })
-  }
-
   return (
-    <div onScroll={modalState.modal && onScroll} className="mt-5">
+    <div className="mt-5">
       <ul className="p-0">
         <MessagesContainer
           state={state}
@@ -162,13 +148,14 @@ function Posts() {
       ) : (
         'derniers posts chargés'
       )}
+      {
+        // Todo delete reducer logic after useModal is fully implemented
+      }
       {modalState.modal === 'response' && (
         <Dialog open={true} role="alertdialog">
           <div className="m-auto shadow rounded p-3 bg-white border border-primary border-3">
             <p>{modalState.message}</p>
-            <ButtonPrimary onClick={onCloseModal} isAutoFocus={true}>
-              Ok
-            </ButtonPrimary>
+            <ButtonPrimary isAutoFocus={true}>Ok</ButtonPrimary>
           </div>
         </Dialog>
       )}

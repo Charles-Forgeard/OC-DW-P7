@@ -8,7 +8,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import ButtonTertiary from '../Atoms/Btn/TertiaryBtn'
 import { host, apiPort } from '../../../config'
 
-function Message({ message, dispatchModalState, user }) {
+function Message({ message, user }) {
   console.log(message)
 
   const [isSpanOptions, showSpanOptions] = useState(false)
@@ -109,10 +109,7 @@ function Message({ message, dispatchModalState, user }) {
         </div>
       </div>
       {user.is_admin || userIsAuthor ? (
-        <MessageOptionsToggleMenu
-          message={message}
-          dispatchModalState={dispatchModalState}
-        />
+        <MessageOptionsToggleMenu message={message} />
       ) : null}
     </li>
   )

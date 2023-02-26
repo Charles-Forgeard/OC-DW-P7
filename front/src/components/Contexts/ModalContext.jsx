@@ -1,11 +1,14 @@
 import { createContext, useRef } from 'react'
 import DisplayModal from '../Modal/DisplayModal'
 
-export const defaultInfoFunction = () => Promise.resolve(true)
+export const defaultFunction = () => Promise.resolve(true)
 
 export const defaultNoModal = {
   infoRef: {
-    current: defaultInfoFunction,
+    current: defaultFunction,
+  },
+  confirmRef: {
+    current: defaultFunction,
   },
   // Todo: add others type of modal here
 }
@@ -13,11 +16,12 @@ export const defaultNoModal = {
 export const ModalContext = createContext(defaultNoModal)
 
 export const ProvideModalContext = ({ children }) => {
-  const infoRef = useRef(defaultInfoFunction)
+  const infoRef = useRef(defaultFunction)
+  const confirmRef = useRef(defaultFunction)
   // Todo: add others modalRef here and in provider value properties
   return (
     <>
-      <ModalContext.Provider value={{ infoRef }}>
+      <ModalContext.Provider value={{ infoRef, confirmRef }}>
         {children}
         <DisplayModal />
       </ModalContext.Provider>
