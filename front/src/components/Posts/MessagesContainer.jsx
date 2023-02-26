@@ -1,17 +1,10 @@
 import Message from './Message.jsx'
-import Dialog from '../Atoms/Dialog/Dialog'
-import ConfirmForm from '../Atoms/Form/ConfirmForm.jsx'
 import { useEffect, Fragment, useContext } from 'react'
 import { SocketContext } from '../Contexts/SocketContext'
 import { UserContext } from '../Contexts/UserContext'
 import useModal from '../../hooks/useModal'
 
-function MessagesContainer({
-  state,
-  dispatch,
-  dispatchModalState,
-  modalState,
-}) {
+function MessagesContainer({ state, dispatch, dispatchModalState }) {
   const socket = useContext(SocketContext)
   const user = useContext(UserContext)
 
@@ -27,14 +20,14 @@ function MessagesContainer({
       })
       if (!errMessage) dispatch({ type: 'addMessage', payload: message })
       if (initBy === user.id && errMessage)
-        dispatchModalState({
-          type: 'openModal',
-          modal: 'response',
-          message: errMessage,
+        info({
+          title: 'Echec création du post',
+          errMessage: `${errMessage}. Si le problème persiste, merci de contacter l'administrateur.`,
+          styleOption: 'danger',
         })
     })
     return () => socket.off('msg:create')
-  }, [socket, dispatch, dispatchModalState, user.id])
+  }, [socket, dispatch, user.id])
 
   useEffect(() => {
     socket.on('msg:update', ({ status, updates, initBy, errMessage }) => {
@@ -49,20 +42,17 @@ function MessagesContainer({
       if (initBy === user.id)
         info({
           title: 'Mise à jour du post',
-          message: errMessage ?? 'mise à jour du post réussie',
+          message: 'mise à jour réussie',
+          errMessage: errMessage,
+          styleOption: errMessage ? 'danger' : 'success',
         })
-      // dispatchModalState({
-      //   type: 'openModal',
-      //   modal: 'response',
-      //   message: errMessage ?? 'mise à jour du post réussie',
-      // })
     })
     return () => socket.off('msg:update')
-  }, [socket, dispatch, dispatchModalState, user.id])
+  }, [socket, dispatch, user.id])
 
   useEffect(() => {
     socket.on('msg:delete', ({ status, message_id, initBy, errMessage }) => {
-      console.log('socket.on msg:update', {
+      console.log('socket.on msg:delete', {
         status,
         message_id,
         initBy,
@@ -71,20 +61,15 @@ function MessagesContainer({
       if (!errMessage)
         dispatch({ type: 'deleteMessage', payload: { id: message_id } })
       if (initBy === user.id)
-        errMessage
-          ? dispatchModalState({
-              type: 'openModal',
-              modal: 'response',
-              message: errMessage,
-            })
-          : dispatchModalState({
-              type: 'openModal',
-              modal: 'response',
-              message: 'Supression du message réussie',
-            })
+        info({
+          title: 'Suppression du post',
+          message: 'Suppression réussie',
+          errMessage: errMessage,
+          styleOption: errMessage ? 'danger' : 'success',
+        })
     })
     return () => socket.off('msg:delete')
-  }, [socket, dispatch, dispatchModalState, user.id])
+  }, [socket, dispatch, user.id])
 
   useEffect(() => {
     socket.on('msg:like', ({ postID, operation, initBy, errMessage }) => {
@@ -100,24 +85,15 @@ function MessagesContainer({
           payload: { postID: postID, operation: operation, initBy: initBy },
         })
       if (initBy === user.id && errMessage) {
-        dispatchModalState({
-          type: 'openModal',
-          modal: 'response',
-          message: errMessage,
+        info({
+          title: 'Echec like du post',
+          errMessage: `${errMessage}. Si le problème persiste, merci de contacter l'administrateur.`,
+          styleOption: 'danger',
         })
       }
     })
     return () => socket.off('msg:like')
-  }, [socket, dispatch, dispatchModalState, user.id])
-
-  function onCloseModal(event) {
-    event.preventDefault()
-    dispatchModalState({ type: 'reset' })
-  }
-
-  function onClickDeleteMsg() {
-    socket.emit('msg:delete', modalState.message.id)
-  }
+  }, [socket, dispatch, user.id])
 
   return (
     <Fragment>
@@ -131,12 +107,6 @@ function MessagesContainer({
           user={user}
         />
       ))}
-
-      {modalState.modal === 'deleteModal' && (
-        <Dialog open={true} onClose={onCloseModal}>
-          <ConfirmForm title="Suppression du post" action={onClickDeleteMsg} />
-        </Dialog>
-      )}
     </Fragment>
   )
 }

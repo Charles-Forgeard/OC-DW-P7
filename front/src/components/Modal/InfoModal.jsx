@@ -26,9 +26,24 @@ function InfoModal() {
   return (
     <>
       <Dialog open={open} role="alertdialog">
-        <div className="m-auto shadow rounded p-3 bg-white border border-primary border-3">
+        <div
+          className={`m-auto shadow rounded p-3 bg-white border border-${
+            modalProps?.styleOption ? modalProps.styleOption : 'primary'
+          } border-5`}
+        >
           {modalProps?.title && <h2>{modalProps?.title}</h2>}
-          {modalProps?.message && <p>{modalProps?.message}</p>}
+          {modalProps?.message && (
+            <p
+              className={
+                modalProps?.styleOption && `text-${modalProps.styleOption}`
+              }
+            >
+              {modalProps?.message}
+            </p>
+          )}
+          {modalProps?.errMessage && (
+            <p className="text-danger">{modalProps?.errMessage}</p>
+          )}
           <ButtonPrimary onClick={onClickValidation} isAutoFocus={true}>
             Ok
           </ButtonPrimary>
