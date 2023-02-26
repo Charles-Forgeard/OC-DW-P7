@@ -118,7 +118,7 @@ const DB_Insert = (sql_req, values) => {
   logger.info(`SQL request: ${sql_req} with args: [${values}]`, 'DATABASE')
   return new Promise((resolve, reject) => {
     const db = openDB(sqlite3.OPEN_READWRITE)
-    db.run(sql_req, values, function err(err) {
+    db.run(sql_req, values, function (err) {
       // logger.info(this.bind(err), 'THIS INSERT')
       // const THIS = this.bind(err).lastID
       db.close()
@@ -139,7 +139,7 @@ const DB_Delete = (sql_req, values) => {
   return new Promise((resolve, reject) => {
     const db = openDB(sqlite3.OPEN_READWRITE)
     //db.get("PRAGMA foreign_keys = ON")
-    db.run(sql_req, values, (err) => {
+    db.run(sql_req, values, function (err) {
       db.close()
       if (err) {
         const _err = new Error(err.message)
@@ -156,7 +156,7 @@ const DB_Update = (sql_req, values) => {
   logger.info(`SQL request: ${sql_req} with args: [${values}]`, 'DATABASE')
   return new Promise((resolve, reject) => {
     const db = openDB(sqlite3.OPEN_READWRITE)
-    db.run(sql_req, values, function err(err) {
+    db.run(sql_req, values, function (err) {
       db.close()
       if (err) {
         const _err = new Error(err.message)

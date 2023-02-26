@@ -112,6 +112,8 @@ exports.socketIo = (httpServer) => {
         socket.request.session.reload((err) => {
           if (err) {
             logger.debug(err)
+            socket.emit('rejected', 'Invalid session')
+            dataBase.delete_sid_uid({ sid: socket.request.session.id })
             return socket.disconnect()
           }
           socket.request.session.cookie.expires = new Date(Date.now() + 45000)
@@ -138,6 +140,7 @@ exports.socketIo = (httpServer) => {
 
       socket.conn.on('packet', (packet) => {
         logger.debug(packet)
+        logger.debug(socket.request.session.id)
         if (packet.type === 'pong') {
           sessionTouch()
         }

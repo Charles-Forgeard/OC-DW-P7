@@ -1,10 +1,8 @@
 import { accessControlByAdmin } from '../../../config'
 import Input from '../Atoms/Input/Input'
 import InputPassword from '../Atoms/Input/InputPassword'
-import useToggle from '../../hooks/useToggle'
-import Dialog from '../Atoms/Dialog/Dialog'
 import ButtonPrimary from '../Atoms/Btn/PrimaryBtn'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import usePostLoginAndGoChat from '../../hooks/usePostLoginAndGoChat'
 
@@ -12,25 +10,13 @@ function LoginFormIndex() {
   const emailInputRef = useRef(null)
   const passwordInputRef = useRef(null)
 
-  const [messageResponseModal, setMessageResponseModal] = useState('')
-  const [showResponseModal, toggleResponseModal] = useToggle(false)
-
-  const postLoginAndGoChat = usePostLoginAndGoChat(
-    setMessageResponseModal,
-    toggleResponseModal
-  )
+  const postLoginAndGoChat = usePostLoginAndGoChat()
 
   async function onClickConnect() {
     postLoginAndGoChat({
       email: emailInputRef.current.value,
       password: passwordInputRef.current.value,
     })
-  }
-
-  function onClickToggleResponseModal(event) {
-    event.preventDefault()
-    toggleResponseModal()
-    passwordInputRef.current.focus()
   }
 
   return (
@@ -64,20 +50,6 @@ function LoginFormIndex() {
           </Link>
         )}
       </form>
-      {showResponseModal && (
-        <Dialog open={true} role="alertdialog" center={true}>
-          <div className="m-auto shadow rounded p-3 bg-white border border-primary border-3">
-            <p>{messageResponseModal}</p>
-            <ButtonPrimary
-              onClick={onClickToggleResponseModal}
-              isAutoFocus={true}
-              className="w-100"
-            >
-              Ok
-            </ButtonPrimary>
-          </div>
-        </Dialog>
-      )}
     </div>
   )
 }

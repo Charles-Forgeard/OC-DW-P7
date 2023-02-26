@@ -1,8 +1,6 @@
 import { createContext, useState, useEffect } from 'react'
 import { SocketContext } from './SocketContext'
 import { useLoaderData } from 'react-router-dom'
-import Dialog from '../Atoms/Dialog/Dialog'
-import ButtonPrimary from '../Atoms/Btn/PrimaryBtn'
 import LoadingSpinner from '../Atoms/Spinner/LoadingSpinner'
 import useModal from '../../hooks/useModal'
 
@@ -16,6 +14,20 @@ export const GetUserContext = ({ children }) => {
   const socket = useLoaderData()
 
   const { info } = useModal()
+
+  useEffect(() => {
+    socket.on('rejected', async (reason) => {
+      await info({
+        title: 'Acces refusé',
+        errMessage: `${reason}. Si le problème persiste. Merci de contacter l'administrateur.`,
+        styleOption: 'danger',
+      })
+      window.location = window.location.origin
+    })
+    return () => {
+      socket.off('rejected')
+    }
+  }, [socket])
 
   useEffect(() => {
     socket.on('user_def', async (user) => {

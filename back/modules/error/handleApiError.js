@@ -9,11 +9,11 @@ function handleError(err, entete = '', res) {
     case 'User is not admin':
     case 'Create user by Admin is not allowed':
       logger.warn(err.message, entete, err)
-      res.status(401).json({ errorMessage: 'Access denied' })
+      res.status(401).json({ errorMessage: 'Accès refusé' })
       break
     case 'SQLITE_CONSTRAINT: UNIQUE constraint failed: sid_uid.uid':
       logger.warn('Session utilisateur déjà ouverte', entete, err)
-      res.status(401).json({ errorMessage: 'session utilisateur déjà ouverte' })
+      res.status(401).json({ errorMessage: 'Session utilisateur déjà ouverte' })
       break
     case 'SQLITE_CONSTRAINT: UNIQUE constraint failed: user.email':
       logger.warn('Compte utilisateur déjà existant', entete, err)
@@ -21,7 +21,7 @@ function handleError(err, entete = '', res) {
       break
     default:
       logger.error(err.message, entete, err)
-      res.status(500).json({ errorMessage: 'Internal error' })
+      res.status(500).json({ errorMessage: 'Erreur interne' })
   }
 }
 

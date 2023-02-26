@@ -99,6 +99,8 @@ module.exports = (io, socket) => {
   const user = socket.request.session.user
 
   const createNewMessage = async ({ text_content, files }) => {
+    logger.debug(user)
+    logger.debug(socket.request.session.id)
     logger.info(
       `New msg sent: {text_content: ${text_content}, files: ${files}} by user ${user.id} on socket ${socket.id}`,
       'SOCKET'

@@ -1,32 +1,31 @@
 import { useNavigate } from 'react-router-dom'
 import { postLogin } from '../api/MsgAPI'
+import useModal from './useModal'
 
-const usePostLoginAndGoChat = (
-  setMessageResponseModal,
-  toggleResponseModal
-) => {
+const usePostLoginAndGoChat = () => {
+  const { info } = useModal()
+
   const navigate = useNavigate()
+
   return async function PostLoginAndGoChat(payload) {
     const { data, error } = await postLogin(payload)
 
     console.log(data)
 
     if (error || data?.errorMessage || !data) {
-      setMessageResponseModal(
-        data?.errorMessage ? data?.errorMessage : 'Echec du login'
-      )
-      toggleResponseModal()
-      return error ? console.error(error) : console.error(data?.errorMessage)
+      error ? console.error(error) : console.error(data)
+      return info({
+        title: 'Echec du login',
+        errMessage: `${
+          data?.errorMessage ?? 'Un incident inattendu est survenu'
+        }. \n Si le problème persiste, merci de contacter l'administrateur`,
+        stypeOption: 'danger',
+      })
     }
 
     switch (data.message) {
       case 'User account is active':
         window.location = `${window.location.origin}/chat/`
-        break
-      case 'access denied':
-        console.error('access denied')
-        setMessageResponseModal('Identifiant et/ou mot de passe incorrect(s)')
-        toggleResponseModal()
         break
       case 'User account is not active':
         console.log('redirect')
@@ -35,11 +34,14 @@ const usePostLoginAndGoChat = (
         })
         break
       default:
-        setMessageResponseModal('Erreur interne')
-        toggleResponseModal()
+        info({
+          title: 'Erreur interne',
+          errMessage:
+            "Un incident inattendu est survenu. Si le problème persiste, merci de contacter l'administrateur",
+          stylePtion: 'danger',
+        })
         console.error('Valeur inattendue en réponse du fetchLogin', {
           data,
-          error,
         })
     }
   }

@@ -42,10 +42,13 @@ exports.login = async (req, res, next) => {
         uid: user_in_DB.id,
       })
     } catch (err) {
+      // Delete this try/catch logic and preserve try content in order to block new login on same user account.
+      // Here, other client with same user account will be disconnect from his socket during socket pong event.
       if (err.code === 'SQLITE_CONSTRAINT') {
         const sid_uid = await dataBase.get_sid_uid({ uid: user_in_DB.id })
         await dataBase.delete_sid_uid({ sid: sid_uid.sid })
-        await dataBase.delete_session({ sid: sid_uid.sid })
+        logger.warn(await dataBase.delete_session({ sid: sid_uid.sid }))
+
         await dataBase.add_sid_uid({
           sid: req.session.id,
           uid: user_in_DB.id,
