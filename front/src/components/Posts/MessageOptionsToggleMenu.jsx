@@ -60,7 +60,7 @@ function MessageOptionsToggleMenu({ message }) {
               to="updatePost"
               state={{ message: message, sendMsgUpdates: 2 }}
               className="dropdown-item text-primary"
-              onClick={onClickToggleMenu}
+              onClick={toggleMenu}
             >
               Modifier
             </Link>

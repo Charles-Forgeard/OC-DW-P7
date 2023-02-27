@@ -4,36 +4,46 @@ import InputPassword from '../Atoms/Input/InputPassword'
 import { useRef, useState, useEffect } from 'react'
 import { postRegister } from '../../api/MsgAPI'
 import AlertDiv from '../Atoms/AlertDiv'
+import useModal from '../../hooks/useModal'
 
-const SignUp = ({ children, callback }) => {
+const SignUp = ({ children, callback, beforeSignUp }) => {
   const emailInputRegisterRef = useRef(null)
   const [newPassword, setNewPassword] = useState('')
   const [alertSpanContent, setAlertSpanContent] = useState('')
   const [confirmNewPassword, setconfirmNewPassword] = useState('')
 
+  const { info } = useModal()
+
   function onKeyUpnewPasswordInput(event) {
     event.preventDefault()
-    console.log('newPassword: ' + event.target.value)
     setNewPassword(event.target.value)
   }
 
   function onKeyUpConfirmNewPasswordInput(event) {
     event.preventDefault()
-    console.log('confirmNewPassword: ' + event.target.value)
     setconfirmNewPassword(event.target.value)
   }
 
   async function onClickSignUp(event) {
     event.preventDefault()
+    console.log('click')
+    if (beforeSignUp) {
+      console.log('beforeSignUp')
+      const result = await beforeSignUp()
+      if (!result) return
+    }
     const { data, error } = await postRegister({
       email: emailInputRegisterRef.current.value,
       password: newPassword,
     })
 
-    if (error || data.errorMessage) {
-      console.error(error ?? data.errorMessage)
-      return callback({
-        errorMessage: data.errorMessage ?? 'Echec création nouvel utilisateur',
+    if (error || data?.errorMessage || !data) {
+      console.error(error ?? data)
+      return info({
+        title: 'Echec création nouvel utilisateur',
+        errMessage:
+          "Si le problème persiste, merci de contacter l'administrateur.",
+        styleOption: 'danger',
       })
     }
 

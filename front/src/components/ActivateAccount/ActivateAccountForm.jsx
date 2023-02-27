@@ -1,13 +1,12 @@
 import { useLocation } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
-import useToggle from '../../hooks/useToggle'
 import usePostLoginAndGoChat from '../../hooks/usePostLoginAndGoChat'
-import Dialog from '../Atoms/Dialog/Dialog'
 import ButtonPrimary from '../Atoms/Btn/PrimaryBtn'
 import InputPassword from '../Atoms/Input/InputPassword'
 import AlertDiv from '../Atoms/AlertDiv'
-//change MsgApi to UserAPI
+//Todo change MsgApi to UserAPI ?
 import { postActiveUserAccount } from '../../api/MsgAPI'
+import useModal from '../../hooks/useModal'
 
 function ActivateAccountForm() {
   const { state } = useLocation()
@@ -16,69 +15,62 @@ function ActivateAccountForm() {
 
   const passwordInputRef = useRef(null)
 
-  const [messageResponseModal, setMessageResponseModal] = useState('')
-  const [showResponseModal, toggleResponseModal] = useToggle(false)
-
   const [newPassword, setNewPassword] = useState('')
   const [alertSpanContent, setAlertSpanContent] = useState('')
   const [confirmNewPassword, setconfirmNewPassword] = useState('')
 
-  const postLoginAndGoChat = usePostLoginAndGoChat(
-    setMessageResponseModal,
-    toggleResponseModal
-  )
+  const { info } = useModal()
+
+  const postLoginAndGoChat = usePostLoginAndGoChat()
 
   async function onSubmitActiveAccount(event) {
     event.preventDefault()
     if (newPassword !== confirmNewPassword) {
-      setMessageResponseModal(
-        'Le mot de passe et sa confirmation doivent être identiques'
-      )
-      toggleResponseModal()
-      return
+      return info({
+        title: 'Requête invalide',
+        errMessage:
+          'Le mot de passe et sa confirmation doivent être identiques',
+        styleOption: 'danger',
+      })
     }
     if (newPassword === userTempPassword) {
-      setMessageResponseModal(
-        "Le nouveau mot de passe doit être différent de l'ancien"
-      )
-      toggleResponseModal()
-      return
+      return info({
+        title: 'Requête invalide',
+        errMessage: "Le nouveau mot de passe doit être différent de l'ancien",
+        styleOption: 'danger',
+      })
     }
     const { data, error } = await postActiveUserAccount({
       email: userEmail,
       password: userTempPassword,
       newPassword: newPassword,
     })
+    if (data?.message === 'User account actived') {
+      return postLoginAndGoChat({ email: userEmail, password: newPassword })
+    }
     if (error || data?.errorMessage || !data) {
-      setMessageResponseModal(
-        data?.errorMessage
-          ? data?.errorMessage
-          : "Echec de l'activation du compte utilisateur"
-      )
-      toggleResponseModal()
-      return error ? console.error(error) : console.error(data?.errorMessage)
+      console.error(error ?? data)
+      return info({
+        title: 'Requête invalide',
+        errMessage: "Le nouveau mot de passe doit être différent de l'ancien",
+        styleOption: 'danger',
+      })
     }
-    if (data.message === 'User account actived') {
-      postLoginAndGoChat({ email: userEmail, password: newPassword })
-    }
+    info({
+      title: 'Incident inattendu',
+      errMessage: "Si l'erreur persiste, merci de contacter l'administrateur.",
+      styleOption: 'danger',
+    })
   }
 
   function onKeyUpnewPasswordInput(event) {
     event.preventDefault()
-    console.log('newPassword: ' + event.target.value)
     setNewPassword(event.target.value)
   }
 
   function onKeyUpConfirmNewPasswordInput(event) {
     event.preventDefault()
-    console.log('confirmNewPassword: ' + event.target.value)
     setconfirmNewPassword(event.target.value)
-  }
-
-  function onClickToggleResponseModal(event) {
-    event.preventDefault()
-    toggleResponseModal()
-    passwordInputRef.current.focus()
   }
 
   useEffect(() => {
@@ -121,20 +113,6 @@ function ActivateAccountForm() {
           </ButtonPrimary>
         </form>
       </div>
-      {showResponseModal && (
-        <Dialog open={true} role="alertdialog" center={true}>
-          <div className="m-auto shadow rounded p-3 bg-white border border-primary border-3">
-            <p>{messageResponseModal}</p>
-            <ButtonPrimary
-              onClick={onClickToggleResponseModal}
-              isAutoFocus={true}
-              className="w-100"
-            >
-              Ok
-            </ButtonPrimary>
-          </div>
-        </Dialog>
-      )}
     </div>
   )
 }

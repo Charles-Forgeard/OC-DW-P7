@@ -24,6 +24,29 @@ function formatUrlPicture(customFile, timeStamp) {
 module.exports = (io, socket) => {
   const sessionUser = socket.request.session.user
 
+  const loginUser = async ({ email, password }) => {
+    logger.warn({ email: email, password: password })
+    try {
+      const {
+        user: loggedUser,
+        isPasswordMatching,
+        error,
+      } = await login({
+        email: email,
+        password: password,
+        sessionUser: sessionUser,
+      })
+      if (error) throw error
+      if (!loggedUser || !isPasswordMatching) {
+        return socket.emit('user:secondLogin', false)
+      }
+      socket.emit('user:secondLogin', true)
+    } catch (err) {
+      logger.error(err, 'SOCKET.on secondLogin')
+      socket.emit('user:secondLogin', false)
+    }
+  }
+
   const updateUser = async ({
     toUpdate: {
       name,
@@ -34,29 +57,13 @@ module.exports = (io, socket) => {
       newPassword,
       profile_picture,
     },
-    login: { logEmail, logPassword },
   }) => {
     logger.info(
       `{name: ${name}, firstname: ${firstname}, email: ${email}, newPassword: ${newPassword}, profile_picture: ${profile_picture}}`,
       'SOCKET ON user:update'
     )
-    logger.debug({ logEmail: logEmail, logPassword: logPassword })
     try {
-      const {
-        user: loggedUser,
-        isPasswordMatching,
-        error,
-      } = await login({
-        email: logEmail,
-        password: logPassword,
-        sessionUser: sessionUser,
-      })
-      if (error) throw error
-      if (!loggedUser) throw new Error('User unknown')
-      if (!isPasswordMatching) throw new Error('Bad password')
-
-      if (!isPasswordMatching) throw new Error('Invalid login')
-      if (email && !loggedUser.is_admin) throw new Error('Forbidden action')
+      if (email && !sessionUser.is_admin) throw new Error('Forbidden action')
       let inactivateAccount = false
 
       newPassword =
@@ -71,15 +78,15 @@ module.exports = (io, socket) => {
       let userToUpdate = {}
 
       if (!email) {
-        userToUpdate = { ...loggedUser }
+        userToUpdate = { ...sessionUser }
       } else if (config.crypt.emailInDB && email) {
-        userToUpdate.email = cipher(config.crypt.emailInDB, email)
+        userToUpdate.email = await cipher(config.crypt.emailInDB, email)
       } else {
         userToUpdate.email = email
       }
 
       if (
-        userToUpdate.email !== loggedUser.email &&
+        userToUpdate.email !== sessionUser.email &&
         config.accessControlByAdmin
       ) {
         inactivateAccount = true
@@ -89,8 +96,10 @@ module.exports = (io, socket) => {
 
       const promises = []
       if (profile_picture) {
-        if (loggedUser.profile_picture_url !== 'default_url_avatar_picture') {
-          promises.push(deleteFile(`private/${loggedUser.profile_picture_url}`))
+        if (sessionUser.profile_picture_url !== 'default_url_avatar_picture') {
+          promises.push(
+            deleteFile(`private/${sessionUser.profile_picture_url}`)
+          )
         }
         promises.push(
           writeFile(
@@ -104,7 +113,7 @@ module.exports = (io, socket) => {
         id: userToUpdate.id,
         name: name,
         firstname: firstname,
-        email: newEmail,
+        email: newEmail ?? userToUpdate.email,
         password: newPassword,
         profile_picture_url: profile_picture
           ? formatUrlPicture(profile_picture, timeStamp)
@@ -116,7 +125,6 @@ module.exports = (io, socket) => {
 
       await Promise.all(promises)
 
-      logger.info(loggedUser)
       logger.info('success', 'SOCKET ON user:update')
       socket.emit('user:update', { status: 204 })
 
@@ -128,7 +136,7 @@ module.exports = (io, socket) => {
         )
           delete allUpdates[property]
       }
-      const userUpdated = { ...loggedUser, ...allUpdates }
+      const userUpdated = { ...sessionUser, ...allUpdates }
 
       logger.info(userUpdated)
 
@@ -165,4 +173,5 @@ module.exports = (io, socket) => {
   }
 
   socket.on('user:update', updateUser)
+  socket.on('user:secondLogin', loginUser)
 }

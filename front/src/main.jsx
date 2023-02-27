@@ -22,7 +22,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Header linkTo="/" />,
+    element: (
+      <ProvideModalContext>
+        <Header linkTo="/" />
+      </ProvideModalContext>
+    ),
     children: [
       { path: '', element: <LoginFormIndex /> },
       { path: 'signUp', element: <SignUpForm /> },
@@ -37,12 +41,14 @@ const router = createBrowserRouter([
     loader: socket,
     element: (
       <GetUserContext>
-        <Header linkTo="/chat">
-          <ToggleLink to="createPost">Éditer post</ToggleLink>
-          <UserMenu />
-        </Header>
-        {/*Outlet goes inside Header component, outside header tag*/}
-        <Posts />
+        <ProvideModalContext>
+          <Header linkTo="/chat">
+            <ToggleLink to="createPost">Éditer post</ToggleLink>
+            <UserMenu />
+          </Header>
+          {/*Outlet goes inside Header component, outside header tag*/}
+          <Posts />
+        </ProvideModalContext>
       </GetUserContext>
     ),
     children: [

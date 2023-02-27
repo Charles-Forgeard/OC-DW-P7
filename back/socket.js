@@ -117,6 +117,7 @@ exports.socketIo = (httpServer) => {
             return socket.disconnect()
           }
           socket.request.session.cookie.expires = new Date(Date.now() + 45000)
+          socket.request.session.user.socketID = socket.id
           socket.request.session.save()
         })
       }

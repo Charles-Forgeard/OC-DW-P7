@@ -5,8 +5,6 @@ import {
   reducer as msgReducer,
   initialState,
 } from '../../hooks/useMessageReducer'
-import Dialog from '../Atoms/Dialog/Dialog'
-import ButtonPrimary from '../Atoms/Btn/PrimaryBtn.jsx'
 import {
   useEffect,
   useRef,
@@ -17,37 +15,11 @@ import {
 } from 'react'
 import useModal from '../../hooks/useModal'
 
-// Todo delete reducer logic after useModal is fully implemented
-const initValue = () => {
-  return { modal: null, message: null, scrollYPos: undefined }
-}
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'openModal':
-      console.log(JSON.stringify(action))
-      return { ...state, modal: action.modal, message: action.message }
-    case 'setScrollYPos':
-      console.log(JSON.stringify(action))
-      return { ...state, scrollYPos: action.scrollYPos }
-    case 'reset':
-      console.log(JSON.stringify(action))
-      return initValue()
-    default:
-      console.error(
-        `arg.type (= ${action.type}) passé à la fonction dispatchModalState() incorrect.\n=> Les valeurs acceptées sont: 'openModal' | 'setScrollYPos' | 'reset'\n=> Exemple: dispatchModalState({type: 'openModal', modal: 'response', message: 'Exemple de texte de modal'})`
-      )
-      return initValue()
-  }
-}
-
 function Posts() {
   const [state, dispatch] = useReducer(msgReducer, initialState)
 
   const intersectorObject = useRef(null)
 
-  // Todo delete reducer logic after useModal is fully implemented
-  const [modalState, dispatchModalState] = useReducer(reducer, initValue)
   const { info } = useModal()
 
   const [isLoading, setLoading] = useState(false)
@@ -133,8 +105,6 @@ function Posts() {
         <MessagesContainer
           state={state}
           dispatch={dispatch}
-          modalState={modalState}
-          dispatchModalState={dispatchModalState}
         ></MessagesContainer>
       </ul>
       <div
@@ -147,17 +117,6 @@ function Posts() {
         </div>
       ) : (
         'derniers posts chargés'
-      )}
-      {
-        // Todo delete reducer logic after useModal is fully implemented
-      }
-      {modalState.modal === 'response' && (
-        <Dialog open={true} role="alertdialog">
-          <div className="m-auto shadow rounded p-3 bg-white border border-primary border-3">
-            <p>{modalState.message}</p>
-            <ButtonPrimary isAutoFocus={true}>Ok</ButtonPrimary>
-          </div>
-        </Dialog>
       )}
     </div>
   )

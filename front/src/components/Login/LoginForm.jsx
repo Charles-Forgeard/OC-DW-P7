@@ -10,6 +10,7 @@ function LoginForm({
   action,
   errMessage,
   className,
+  onCancel = () => {},
 }) {
   return (
     <form className={className} method="dialog">
@@ -28,7 +29,7 @@ function LoginForm({
         refInput={refInputPassword}
       ></InputPassword>
       {errMessage && <AlertDiv>{errMessage}</AlertDiv>}
-      <ButtonPrimary type="submit" className="me-3">
+      <ButtonPrimary type="submit" className="me-3" onClick={onCancel}>
         Annuler
       </ButtonPrimary>
       <ButtonTertiary type="submit" onClick={action}>

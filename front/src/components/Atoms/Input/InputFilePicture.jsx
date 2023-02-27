@@ -2,8 +2,16 @@ import { Fragment, useRef } from 'react'
 import AddPictureSvg from '../Icons/AddPictureSvg'
 import PictureLink from '../Picture/PictureLink'
 
+function setKey(key, keyArray) {
+  if (keyArray.indexOf(key) !== -1) {
+    return setKey(++key, keyArray)
+  } else {
+    return key
+  }
+}
+
 function InputFilePicture({ picturesComp, setFilesToSend, setPicturesInView }) {
-  const imgInput = useRef(null)
+  const imgInputRef = useRef(null)
 
   async function onChangeInput(event) {
     event.preventDefault()
@@ -19,14 +27,6 @@ function InputFilePicture({ picturesComp, setFilesToSend, setPicturesInView }) {
 
       console.log('fileId: ', JSON.stringify(i))
 
-      function setKey(key, keyArray) {
-        if (keyArray.indexOf(key) !== -1) {
-          return setKey(++key, keyArray)
-        } else {
-          return key
-        }
-      }
-
       const localId = setKey(i, picturesCompKeys)
 
       const customFile = {
@@ -41,21 +41,16 @@ function InputFilePicture({ picturesComp, setFilesToSend, setPicturesInView }) {
 
       setFilesToSend((filesToSend) => [...filesToSend, customFile])
 
-      async function onClickRemoveInputFile(event) {
+      function onClickRemoveInputFile(event) {
         event.preventDefault()
-        // console.log(event.target)
         const newData = new DataTransfer()
         setFilesToSend((filesToSend) => {
           for (let i = 0; i < filesToSend.length; i++) {
-            // console.log('iterate')
-            // console.log(typeof filesToSend[i].localId)
-            // console.log(typeof event.target.id)
             if (filesToSend[i].localId !== event.target.id) {
               newData.items.add(filesToSend[i].buffer)
             } else {
               setFilesToSend((filesToSend) =>
                 filesToSend.filter((customFile) => {
-                  // console.log(customFile.localId !== event.target.id)
                   return customFile.localId !== event.target.id
                 })
               )
@@ -92,7 +87,7 @@ function InputFilePicture({ picturesComp, setFilesToSend, setPicturesInView }) {
       </label>
       <input
         id="imgFileInput"
-        ref={imgInput}
+        ref={imgInputRef}
         onChange={onChangeInput}
         type="file"
         className="opacity-0 position-absolute visually-hidden"

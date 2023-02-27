@@ -1,9 +1,8 @@
 const logger = require('../modules/logger/console-dev')
 const dataBase = require('../dataBase/dataBase')
-const config = require('../config')
 const handleError = require('../modules/error/handleApiError')
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res) => {
   try {
     const messages = await dataBase.getAllPosts({
       user_id: req.session.user.id,
