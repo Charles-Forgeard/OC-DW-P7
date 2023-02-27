@@ -5,6 +5,7 @@ const dataBase = require('../dataBase/dataBase')
 const config = require('../config')
 const argon2 = require('../modules/crypt/generate-verify-hash')
 const login = require('../modules/login/login')
+const validator = require('validator')
 
 exports.isActive = (req, res) => {
   if (req.session.user.is_active) {
@@ -110,6 +111,16 @@ exports.createUser = async (req, res) => {
       throw new Error('User is not admin')
     if (!config.accessControlByAdmin && req.session?.user?.is_admin)
       throw new Error('Create user by Admin is not allowed')
+    const isValidEmail = validator.isEmail(req.body.email)
+    if (!isValidEmail) throw new Error('Email format invalid')
+    const isValidPassword = validator.isStrongPassword(req.body.password, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minSymbols: 1,
+      minNumbers: 1,
+    })
+    if (!isValidPassword) throw new Error('Password format invalid')
     const password = config.crypt.passwordInDB
       ? await argon2.hash(req.body.password)
       : req.body.password

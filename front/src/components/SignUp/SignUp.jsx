@@ -32,6 +32,13 @@ const SignUp = ({ children, callback, beforeSignUp }) => {
       const result = await beforeSignUp()
       if (!result) return
     }
+    if (!emailInputRegisterRef.current.value || !newPassword)
+      return info({
+        title: 'requête invalide',
+        errMessage: "Au moins l'un des champs du formulaire est vide",
+        styleOption: 'danger',
+      })
+
     const { data, error } = await postRegister({
       email: emailInputRegisterRef.current.value,
       password: newPassword,
@@ -41,8 +48,9 @@ const SignUp = ({ children, callback, beforeSignUp }) => {
       console.error(error ?? data)
       return info({
         title: 'Echec création nouvel utilisateur',
-        errMessage:
-          "Si le problème persiste, merci de contacter l'administrateur.",
+        errMessage: `${
+          data?.errorMessage ? data.errorMessage + '. ' : null
+        }Si le problème persiste, merci de contacter l'administrateur.`,
         styleOption: 'danger',
       })
     }

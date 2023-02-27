@@ -11,6 +11,14 @@ function handleError(err, entete = '', res) {
       logger.warn(err.message, entete, err)
       res.status(401).json({ errorMessage: 'Accès refusé' })
       break
+    case 'Email format invalid':
+      logger.warn(err.message, entete, err)
+      res.status(403).json({ errorMessage: "Format d'email invalide" })
+      break
+    case 'Password format invalid':
+      logger.warn(err.message, entete, err)
+      res.status(403).json({ errorMessage: 'Format de mot de passe invalide' })
+      break
     case 'SQLITE_CONSTRAINT: UNIQUE constraint failed: sid_uid.uid':
       logger.warn('Session utilisateur déjà ouverte', entete, err)
       res.status(401).json({ errorMessage: 'Session utilisateur déjà ouverte' })
