@@ -136,6 +136,11 @@ module.exports = (io, socket) => {
         )
           delete allUpdates[property]
       }
+
+      if (allUpdates.profile_picture_url === null) {
+        allUpdates.profile_picture_url = sessionUser.profile_picture_url
+      }
+
       const userUpdated = { ...sessionUser, ...allUpdates }
 
       logger.info(userUpdated)
