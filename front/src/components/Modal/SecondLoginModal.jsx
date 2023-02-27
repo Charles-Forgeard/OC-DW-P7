@@ -79,6 +79,7 @@ function SecondLoginModal() {
         <div className="m-auto bg-white p-3 border border-3 border-primary rounded">
           <h6>Confirmation d&apos;identité requise</h6>
           <LoginForm
+            inputIdKeyword="SecondLogin"
             refInputEmail={logEmail}
             refInputPassword={logPassword}
             action={onClickLogin}

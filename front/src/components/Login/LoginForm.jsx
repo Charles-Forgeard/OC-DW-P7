@@ -10,19 +10,20 @@ function LoginForm({
   action,
   errMessage,
   className,
+  inputIdKeyword,
   onCancel = () => {},
 }) {
   return (
     <form className={className} method="dialog">
       <Input
-        id="logEmail"
+        id={`${inputIdKeyword ?? ''}_logEmail`}
         label="Email"
         type="email"
         placeholder="Email utilisateur"
         refInput={refInputEmail}
       />
       <InputPassword
-        id="logPassword"
+        id={`${inputIdKeyword ?? ''}_logPassword`}
         label="Mot de passe"
         type="password"
         placeholder="Mot de passe utilisateur"

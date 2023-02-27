@@ -1,5 +1,4 @@
 import { createContext, useRef } from 'react'
-import DisplayModal from '../Modal/DisplayModal'
 
 export const defaultFunction = () => Promise.resolve(true)
 
@@ -24,11 +23,8 @@ export const ProvideModalContext = ({ children }) => {
   const secondLoginRef = useRef(defaultFunction)
   // Todo: add others modalRef here and in provider value properties
   return (
-    <>
-      <ModalContext.Provider value={{ infoRef, confirmRef, secondLoginRef }}>
-        {children}
-        <DisplayModal />
-      </ModalContext.Provider>
-    </>
+    <ModalContext.Provider value={{ infoRef, confirmRef, secondLoginRef }}>
+      {children}
+    </ModalContext.Provider>
   )
 }

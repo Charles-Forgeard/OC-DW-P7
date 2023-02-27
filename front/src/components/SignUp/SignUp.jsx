@@ -76,6 +76,7 @@ const SignUp = ({ children, callback, beforeSignUp }) => {
   return (
     <>
       <Input
+        id="signUpEmail"
         refInput={emailInputRegisterRef}
         label="Email"
         type="email"
@@ -84,6 +85,7 @@ const SignUp = ({ children, callback, beforeSignUp }) => {
         autoComplete="email"
       />
       <InputPassword
+        id="signUpPassword"
         type="password"
         placeholder="new password"
         label="Mot de passe"
@@ -92,6 +94,7 @@ const SignUp = ({ children, callback, beforeSignUp }) => {
         autoComplete="new-password"
       />
       <InputPassword
+        id="signUpConfirmPassword"
         type="password"
         placeholder="new password"
         label="Confirmation mot du passe"

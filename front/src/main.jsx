@@ -14,6 +14,7 @@ import UserOptionsMenu from './components/UserMenu/UserOptions/UserOptionsMenu'
 import AdminOptionsMenu from './components/UserMenu/AdminOptions/AdminOptionsMenu'
 import { GetUserContext } from './components/Contexts/UserContext'
 import { ProvideModalContext } from './components/Contexts/ModalContext'
+import DisplayModals from './components/Modal/DisplayModals'
 import socket from './socket/socket'
 import './style/bootstrap.css'
 
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
     element: (
       <ProvideModalContext>
         <Header linkTo="/" />
+        <DisplayModals />
       </ProvideModalContext>
     ),
     children: [
@@ -48,6 +50,7 @@ const router = createBrowserRouter([
           </Header>
           {/*Outlet goes inside Header component, outside header tag*/}
           <Posts />
+          <DisplayModals />
         </ProvideModalContext>
       </GetUserContext>
     ),
