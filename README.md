@@ -45,11 +45,11 @@ Pour cette version d'exemple, une clé de cryptage des emails en base de donnée
 Cette version permet de se loguer avec le compte administrateur.
 Ce compte devra être recréé une fois la clé de cryptage reconfigurée avant mise en production.
 
-### `npm run install` puis `npm run dev` dans dossier **/back**
+### `npm install` puis `npm run dev` dans dossier **/back**
 
 Installez et démarrez le serveur servant l'api et le socket en local, executez cette commande dans un terminal dans le dossier **'/back'**.
 
-### `npm run install` puis `npm run dev` dans dossier **/front**
+### `npm install` puis `npm run dev` dans dossier **/front**
 
 Installez et démarrez le serveur servant l'app react, executez cette commande dans un terminal dans le dossier **'/front'**.
 
