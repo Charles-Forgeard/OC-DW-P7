@@ -4,38 +4,33 @@ import InputPassword from '../../Atoms/Input/InputPassword.jsx'
 import FormBtn from '../../Atoms/Btn/FormBtn.jsx'
 import { UserContext } from '../../Contexts/UserContext.jsx'
 import AlertDiv from '../../Atoms/AlertDiv.jsx'
-import useToggle from '../../../hooks/useToggle.js'
 import { SocketContext } from '../../Contexts/SocketContext'
-import LoginForm from '../../Login/LoginForm.jsx'
-import Dialog from '../../Atoms/Dialog/Dialog'
-import ButtonPrimary from '../../Atoms/Btn/PrimaryBtn'
 import ButtonClose from '../../Atoms/Btn/CloseBtn'
 import InputUserPicture from '../../Atoms/Input/InputUserPicture'
 import Picture from '../../Atoms/Picture/Picture'
 import { host, apiPort } from '../../../../config'
+import useModal from '../../../hooks/useModal'
 
 import { useRef, useContext, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+
+// Todo tester toutes les fonctions de UserOptionsMenu après l'implementation de useModal
 
 function UserOptionsMenu() {
   const user = useContext(UserContext)
   const socket = useContext(SocketContext)
 
+  const { info, secondLogin } = useModal()
+
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setconfirmNewPassword] = useState('')
 
   const [alertSpanContent, setAlertSpanContent] = useState('')
-  const [showConfirmUpdateModal, toggleShowConfirmUpdateModal] =
-    useToggle(false)
   const [emailInputValue, setEmailInputValue] = useState('')
-  const [showResponseModal, toggleResponseModal] = useToggle(false)
-  const [messageResponseModal, setMessageResponseModal] = useState('')
 
   const nameInput = useRef(null)
   const firstnameInput = useRef(null)
   const newEmailInput = useRef(null)
-  const logEmail = useRef(null)
-  const logPassword = useRef(null)
   const confirmPasswordInput = useRef(null)
 
   const [fileToSend, setFileToSend] = useState(null)
@@ -64,42 +59,27 @@ function UserOptionsMenu() {
       setAlertSpanContent(
         "Le nouveau mot de passe n'est pas identique à sa confirmation"
       )
-      toggleResponseModal()
     }
   }
 
-  function onClickShowConfirmModal(event) {
+  async function onClickShowConfirmModal(event) {
     event.preventDefault()
     if (newPassword !== confirmNewPassword) {
-      setMessageResponseModal(
-        "Le nouveau mot de passe n'est pas identique à sa confirmation"
-      )
-      return toggleResponseModal()
+      return info({
+        title: 'Requête non  valide',
+        errMessage:
+          "Le nouveau mot de passe n'est pas identique à sa confirmation",
+        styleOption: 'danger',
+      })
     }
-    console.log('newEmailInput', newEmailInput)
-    console.log('nameInput', nameInput)
-    console.log('firstnameInput', firstnameInput)
-
-    console.log(`socket.emit('user:update', {toUpdate: 
-            {
-                name: ${nameInput?.current?.value}, 
-                firstname: ${firstnameInput?.current?.value},
-                newEmail: ${newEmailInput?.current?.value},
-                email:  ${emailInputValue},
-                newPassword: ${
-                  confirmNewPassword === newPassword ? newPassword : undefined
-                }
-            },
-        
-        login: {
-            logEmail: ${logEmail?.current?.value},
-            logPassword: ${logPassword?.current?.value}
-        })`)
-    toggleShowConfirmUpdateModal()
+    const isValid = await secondLogin()
+    if (isValid) {
+      updateUser()
+    }
   }
   //{toUpdate: {name, firstname, email, password, profile_picture}, login : {logEmail, logPassword}}
-  function onClickUpdateUser(event) {
-    event.preventDefault()
+  function updateUser() {
+    console.log('user:update')
     socket.emit('user:update', {
       toUpdate: {
         name: nameInput?.current?.value,
@@ -110,33 +90,7 @@ function UserOptionsMenu() {
         newPassword:
           confirmNewPassword === newPassword ? newPassword : undefined,
       },
-
-      login: {
-        logEmail: logEmail?.current?.value,
-        logPassword: logPassword?.current?.value,
-      },
     })
-    console.log(`socket.emit('user:update', {toUpdate: 
-            {
-                name: ${nameInput?.current?.value}, 
-                firstname: ${firstnameInput?.current?.value},
-                newEmail: ${newEmailInput?.current?.value},
-                email:  ${emailInputValue}, 
-                profile_picture: ${fileToSend},
-                newPassword: ${
-                  confirmNewPassword === newPassword ? newPassword : undefined
-                }
-            },
-        
-        login: {
-            logEmail: ${logEmail?.current?.value},
-            logPassword: ${logPassword?.current?.value}
-        })`)
-  }
-
-  function onClickToggleResponseModal(event) {
-    event.preventDefault()
-    toggleResponseModal()
   }
 
   useEffect(() => {
@@ -158,24 +112,29 @@ function UserOptionsMenu() {
     socket.on('user:update', ({ status }) => {
       switch (status) {
         case 204:
-          setMessageResponseModal('Modification du compte réussie')
+          info({
+            title: 'Modification du compte réussie',
+            styleOption: 'success',
+          })
           break
         case 401:
-          setMessageResponseModal('Action non autorisée.')
-          break
-        case 500:
-          setMessageResponseModal(
-            "La requete a rencontré une erreur. Si l'erreur ce reproduit, merci de contacter l'administrateur"
-          )
+          info({
+            title: 'Action non autorisée.',
+            errMessage:
+              "Si l'erreur ce reproduit, merci de contacter l'administrateur",
+            styleOption: 'danger',
+          })
           break
         default:
-          setMessageResponseModal(
-            "La requete a rencontré une erreur inattendue. Si l'erreur ce reproduit, merci de contacter l'administrateur"
-          )
+          info({
+            title: 'Incident inattendu',
+            errMessage:
+              "La requête a rencontré une erreur inattendue. Si l'erreur ce reproduit, merci de contacter l'administrateur",
+            styleOption: 'danger',
+          })
       }
-      toggleResponseModal()
     })
-  }, [socket, toggleResponseModal])
+  }, [socket])
 
   return (
     <div
@@ -259,34 +218,6 @@ function UserOptionsMenu() {
             Mise à jour
           </FormBtn>
         </UserOptionsMenuItem>
-
-        {showConfirmUpdateModal && (
-          <Dialog open={true} onClose={toggleShowConfirmUpdateModal}>
-            <div className="m-auto bg-white p-3 border border-3 border-primary rounded">
-              <h6>Confirmation d&apos;identité requise</h6>
-              <LoginForm
-                refInputEmail={logEmail}
-                refInputPassword={logPassword}
-                action={onClickUpdateUser}
-                title={null}
-                list={null}
-              />
-            </div>
-          </Dialog>
-        )}
-        {showResponseModal && (
-          <Dialog open={true} role="alertdialog">
-            <div className="m-auto shadow rounded p-3 bg-white border border-primary border-3">
-              <p>{messageResponseModal}</p>
-              <ButtonPrimary
-                onClick={onClickToggleResponseModal}
-                isAutoFocus={true}
-              >
-                Ok
-              </ButtonPrimary>
-            </div>
-          </Dialog>
-        )}
       </ul>
       <Link to="..">
         <ButtonClose />
