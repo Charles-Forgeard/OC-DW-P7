@@ -72,7 +72,7 @@ function SecondLoginModal() {
     <>
       {isLoading && (
         <Dialog open={true}>
-          <LoadingSpinner />
+          <LoadingSpinner className="m-auto" size={8} />
         </Dialog>
       )}
       <Dialog open={open}>
