@@ -32,15 +32,24 @@ export const reducer = (state, action) => {
             return {
               ...message,
               likes: message.likes + 1,
-              liked_by_user: action.payload.initBy,
+              liked_by_user: action.payload.initByUser
+                ? true
+                : message.liked_by_user,
             }
           } else {
-            return { ...message, likes: message.likes - 1, liked_by_user: null }
+            return {
+              ...message,
+              likes: message.likes - 1,
+              liked_by_user: action.payload.initByUser
+                ? null
+                : message.liked_by_user,
+            }
           }
         } else {
           return message
         }
       })
+
       return { ...state, messages: [...likedMessages] }
     }
     case 'updateMessageAuthor': {
