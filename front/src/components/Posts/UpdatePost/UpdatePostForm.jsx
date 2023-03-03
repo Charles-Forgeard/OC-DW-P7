@@ -6,9 +6,11 @@ import { useLocation, Link } from 'react-router-dom'
 import { SocketContext } from '../../Contexts/SocketContext'
 import ResizableTextarea from '../../Atoms/Textarea/ResizableTextarea'
 import { host, apiPort } from '../../../../config'
+import useModal from '../../../hooks/useModal'
 
 function UpdateMessageForm() {
   const socket = useContext(SocketContext)
+  const { info } = useModal()
 
   let { state } = useLocation()
   const message = state.message
@@ -39,29 +41,19 @@ function UpdateMessageForm() {
 
   const textarea = useRef(null)
 
-  const formRef = useRef(null)
-
-  const [formRefYpoS, setFormYPos] = useState(0)
-
-  useEffect(() => {
-    setFormYPos(formRef.current.getBoundingClientRect().y)
-    console.log(formRef.current.getBoundingClientRect().y)
-  }, [])
-
   function onClickUpdateMsg() {
-    console.log({
-      id: message.id,
-      text_content: textarea.current.value,
-      picturesToDelete: picturesToDelete,
-      files: filesToSend,
-    })
+    if (!textarea.current.value) {
+      return info({
+        title: 'Le post ne contient pas de texte',
+        errMessage: 'Le post doit contenir du texte pour être mis à jour.',
+        styleOption: 'danger',
+      })
+    }
     if (
       textarea.current.value !== message.text_content ||
       picturesToDelete.length ||
       filesToSend.length
     ) {
-      console.log('setMsgUpdates')
-      console.log('filesToSend= ' + JSON.stringify(filesToSend))
       socket.emit('msg:update', {
         id: message.id,
         text_content: textarea.current.value,
@@ -69,7 +61,12 @@ function UpdateMessageForm() {
         files: filesToSend,
       })
     } else {
-      //@todo com with user
+      return info({
+        title: 'Pas de changement détecté',
+        errMessage:
+          "Il semble que vous n'ayez pas changé les images ou le texte du post. Il ne sera donc pas mis à jour. ",
+        styleOption: 'danger',
+      })
     }
   }
 
@@ -86,8 +83,7 @@ function UpdateMessageForm() {
   return (
     <div
       className="bg-white mt-3 shadow-lg rounded d-flex w-100 gap-3 p-3 sticky-top overflow-scroll"
-      style={{ top: formRefYpoS, maxHeight: '70vh', resize: 'both' }}
-      ref={formRef}
+      style={{ maxHeight: '70vh', resize: 'both' }}
     >
       {console.log('render: UpdateMessageForm')}
       <AvatarPicture width="36px" src={avatar_picture_url} />
@@ -110,6 +106,9 @@ function UpdateMessageForm() {
           setPicturesInView={setPicturesInView}
         />
         <div className="d-flex flex-wrap gap-3">{picturesCompInView}</div>
+        {picturesCompInView.length > 0 && (
+          <p>Cliquez sur une image pour la supprimer.</p>
+        )}
         <Link to=".." className="btn btn-primary text-white fw-bold mt-3 me-3">
           Annuler
         </Link>
