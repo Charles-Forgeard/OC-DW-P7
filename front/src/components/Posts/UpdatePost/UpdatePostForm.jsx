@@ -78,6 +78,11 @@ function UpdateMessageForm() {
       ...picturesToDelete,
       { id: event.target.id, url: event.target.src },
     ])
+    setPicturesInView((picturesInView) =>
+      picturesInView.filter(
+        (pictureComp) => pictureComp.key !== event.target.id
+      )
+    )
   }
 
   return (
@@ -109,6 +114,7 @@ function UpdateMessageForm() {
         {picturesCompInView.length > 0 && (
           <p>Cliquez sur une image pour la supprimer.</p>
         )}
+        {console.log('picturesCompInView: ', picturesCompInView)}
         <Link to=".." className="btn btn-primary text-white fw-bold mt-3 me-3">
           Annuler
         </Link>
