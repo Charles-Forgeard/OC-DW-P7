@@ -76,13 +76,17 @@ function MessagesContainer({ state, dispatch, dispatchModalState }) {
       console.log({
         postID: postID,
         operation: operation,
-        initBy: initBy,
+        initBy: initBy === user.id,
         errMessage: errMessage,
       })
       if (!errMessage)
         dispatch({
           type: 'likeMessage',
-          payload: { postID: postID, operation: operation, initBy: initBy },
+          payload: {
+            postID: postID,
+            operation: operation,
+            initByUser: initBy === user.id,
+          },
         })
       if (initBy === user.id && errMessage) {
         info({
