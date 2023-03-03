@@ -9,7 +9,7 @@ const { host, AccessControlAllowOrigin } = require('./config')
 exports.socketIo = (httpServer) => {
   const io = new Server(httpServer, {
     path: '/socket/',
-    maxHttpBufferSize: 5e8,
+    maxHttpBufferSize: 3e6,
     cors: {
       origin: AccessControlAllowOrigin ?? `${host}`,
       methods: ['GET', 'POST'],

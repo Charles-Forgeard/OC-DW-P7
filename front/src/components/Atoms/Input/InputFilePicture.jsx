@@ -1,6 +1,7 @@
 import { Fragment, useRef } from 'react'
 import AddPictureSvg from '../Icons/AddPictureSvg'
 import PictureLink from '../Picture/PictureLink'
+import useModal from '../../../hooks/useModal'
 
 function setKey(key, keyArray) {
   if (keyArray.indexOf(key) !== -1) {
@@ -12,10 +13,10 @@ function setKey(key, keyArray) {
 
 function InputFilePicture({ picturesComp, setFilesToSend, setPicturesInView }) {
   const imgInputRef = useRef(null)
+  const { info } = useModal()
 
   async function onChangeInput(event) {
     event.preventDefault()
-    // console.log('input event')
     let { files } = event.target
 
     console.log(files)
@@ -24,6 +25,20 @@ function InputFilePicture({ picturesComp, setFilesToSend, setPicturesInView }) {
 
     for (let i = 0; i < files.length; i++) {
       const file = event.target.files[i]
+
+      if (file.size > 3000000) {
+        return info({
+          title: 'Fichier trop lourd',
+          errMessage: (
+            <>
+              L&apos;image {file.name} dépasse les 3 Mo. Pour réduire le poid de
+              l&apos;image, vous pouvez aller sur ce site:{' '}
+              <a href="https://tinypng.com/">tinypng.com</a>.{' '}
+            </>
+          ),
+          styleOption: 'danger',
+        })
+      }
 
       console.log('fileId: ', JSON.stringify(i))
 
@@ -58,7 +73,7 @@ function InputFilePicture({ picturesComp, setFilesToSend, setPicturesInView }) {
           }
           return filesToSend
         })
-        imgInput.current.files = newData.files // Assign the updates list
+        imgInputRef.current.files = newData.files // Assign the updates list
         event.target.remove()
       }
 
