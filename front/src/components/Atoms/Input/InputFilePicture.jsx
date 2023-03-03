@@ -74,7 +74,11 @@ function InputFilePicture({ picturesComp, setFilesToSend, setPicturesInView }) {
           return filesToSend
         })
         imgInputRef.current.files = newData.files // Assign the updates list
-        event.target.remove()
+        setPicturesInView((picturesInView) =>
+          picturesInView.filter(
+            (pictureComp) => pictureComp.key !== event.target.id
+          )
+        )
       }
 
       const pictureComp = (
@@ -96,9 +100,10 @@ function InputFilePicture({ picturesComp, setFilesToSend, setPicturesInView }) {
 
   return (
     <Fragment>
-      <label htmlFor="imgFileInput" className="d-block">
+      <label htmlFor="imgFileInput" className="d-block" role="button">
         {/* <img src={URL.createObjectURL(file)} /> */}
         <AddPictureSvg />
+        Ajouter des images
       </label>
       <input
         id="imgFileInput"
