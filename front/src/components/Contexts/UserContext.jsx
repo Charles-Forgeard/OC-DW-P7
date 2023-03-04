@@ -2,7 +2,8 @@ import { createContext, useState, useEffect } from 'react'
 import { SocketContext } from './SocketContext'
 import { useLoaderData } from 'react-router-dom'
 import LoadingSpinner from '../Atoms/Spinner/LoadingSpinner'
-import useModal from '../../hooks/useModal'
+import Dialog from '../Atoms/Dialog/Dialog'
+import ButtonPrimary from '../Atoms/Btn/PrimaryBtn'
 
 export const UserContext = createContext({})
 
@@ -13,16 +14,24 @@ export const GetUserContext = ({ children }) => {
 
   const socket = useLoaderData()
 
-  const { info } = useModal()
+  const [disconnectModal, setDisconnecModal] = useState({
+    visible: false,
+    title: '',
+    message: '',
+  })
+
+  function onClickGoToLoginPage(event) {
+    event.preventDefault()
+    window.location = window.location.origin
+  }
 
   useEffect(() => {
     socket.on('rejected', async (reason) => {
-      await info({
+      setDisconnecModal({
+        visible: true,
         title: 'Acces refusé',
-        errMessage: `${reason}. Si le problème persiste. Merci de contacter l'administrateur.`,
-        styleOption: 'danger',
+        message: `${reason}. Si le problème persiste. Merci de contacter l'administrateur.`,
       })
-      window.location = window.location.origin
     })
     return () => {
       socket.off('rejected')
@@ -34,13 +43,12 @@ export const GetUserContext = ({ children }) => {
       console.log(user)
       setLoading(false)
       if (!user) {
-        await info({
+        setDisconnecModal({
+          visible: true,
           title: 'Acces refusé',
-          errMessage:
+          message:
             "Si le problème persiste. Merci de contacter l'administrateur.",
-          styleOption: 'danger',
         })
-        window.location = window.location.origin
       }
       user ? setUserDef({ ...user }) : setUserDef(false)
     })
@@ -51,7 +59,19 @@ export const GetUserContext = ({ children }) => {
 
   return (
     <>
-      {!userDef ? (
+      {disconnectModal.visible ? (
+        <Dialog open={true} role="alertdialog">
+          <div
+            className={`m-auto shadow rounded p-3 bg-white border border-danger border-5`}
+          >
+            <h2>{disconnectModal.title}</h2>
+            <p className="text-danger">{disconnectModal.message}</p>
+            <ButtonPrimary onClick={onClickGoToLoginPage} isAutoFocus={true}>
+              Ok
+            </ButtonPrimary>
+          </div>
+        </Dialog>
+      ) : !userDef ? (
         <div className="d-flex justify-content-center">
           {isLoading && <LoadingSpinner size={8} />}
         </div>
