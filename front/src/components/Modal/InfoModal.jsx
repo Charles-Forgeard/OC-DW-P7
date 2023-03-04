@@ -19,7 +19,7 @@ function InfoModal() {
 
   function onClickValidation(event) {
     event.preventDefault()
-    resolveRef.current(true)
+    resolveRef.current('essai')
     setOpen(false)
   }
 

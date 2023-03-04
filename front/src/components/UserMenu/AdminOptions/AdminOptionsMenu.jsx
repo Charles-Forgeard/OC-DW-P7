@@ -16,19 +16,15 @@ import { Link } from 'react-router-dom'
 function UserOptionsMenu() {
   const socket = useContext(SocketContext)
 
-  const { info, secondLogin, confirm } = useModal()
+  const { info, secondLogin } = useModal()
 
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setconfirmNewPassword] = useState('')
 
   const [alertSpanContent, setAlertSpanContent] = useState('')
-  const [showConfirmUpdateModal, toggleShowConfirmUpdateModal] =
-    useToggle(false)
 
   const [emailInputValue, setEmailInputValue] = useState('')
 
-  const logEmail = useRef(null)
-  const logPassword = useRef(null)
   const confirmPasswordInput = useRef(null)
 
   function onKeyUpnewPasswordInput(event) {
@@ -67,11 +63,9 @@ function UserOptionsMenu() {
         stypeOption: 'danger',
       })
     }
-    const isConfirmed = await confirm({
-      title: 'Confirmation du changement de mot de passe',
-    })
+    const isIdentityVerified = await secondLogin()
 
-    if (isConfirmed) updateUser()
+    if (isIdentityVerified) updateUser()
   }
   //{toUpdate: {name, firstname, email, password, profile_picture}, login : {logEmail, logPassword}}
   function updateUser() {

@@ -77,7 +77,7 @@ function SecondLoginModal() {
       )}
       <Dialog open={open}>
         <div className="m-auto bg-white p-3 border border-3 border-primary rounded">
-          <h6>Confirmation d&apos;identité requise</h6>
+          <h2>Confirmation d&apos;identité requise</h2>
           <LoginForm
             inputIdKeyword="SecondLogin"
             refInputEmail={logEmail}

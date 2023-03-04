@@ -17,39 +17,6 @@ exports.socketIo = (httpServer) => {
     },
   })
 
-  const messageHandlers = require('./socketHandlers/messageHandlers.js')
-  const userHandlers = require('./socketHandlers/userHandlers')
-
-  const wrap = (middleware) => (socket, next) =>
-    middleware(socket.request, {}, next)
-
-  io.of('/socket/').use(
-    wrap(
-      session({
-        secret: '!a(M>c3@cKlEPf23sl7^][R]<>6Eol3GwZz{%Y&{-duj)VN7sV!a|9A;EJeQ',
-        resave: false,
-        saveUninitialized: false,
-        store: new SQLiteStore({
-          dir: './dataBase',
-          db: 'db.sqlite',
-        }),
-      })
-    )
-  )
-
-  io.of('/socket/').use(wrap(auth.is_active))
-
-  io.of('/socket/').use((socket, next) => {
-    if (socket.request.auth === 'rejected') {
-      logger.warn(`socket.id = ${socket.id}`, 'SOCKET REJECTED')
-      socket.emit('rejected', 'ping')
-      socket.disconnect()
-      next()
-    } else {
-      next()
-    }
-  })
-
   io.of('/socket/').adapter.on('join-room', async (room, id) => {
     const socket = await io.of('/socket/').in(id).fetchSockets()
     const user = socket[0].request.session?.user
@@ -75,6 +42,45 @@ exports.socketIo = (httpServer) => {
         .except(id)
         .emit('attendees', { mouvement: 'leave', id: id })
       logger.info(`socket ${id} has leaved room ${room}`, 'SOCKET LEAVE ROOM')
+    }
+  })
+
+  const messageHandlers = require('./socketHandlers/messageHandlers.js')
+  const userHandlers = require('./socketHandlers/userHandlers')
+
+  const wrap = (middleware) => (socket, next) =>
+    middleware(socket.request, {}, next)
+
+  io.of('/socket/').use(
+    wrap(
+      session({
+        secret: '!a(M>c3@cKlEPf23sl7^][R]<>6Eol3GwZz{%Y&{-duj)VN7sV!a|9A;EJeQ',
+        resave: false,
+        saveUninitialized: false,
+        store: new SQLiteStore({
+          dir: './dataBase',
+          db: 'db.sqlite',
+        }),
+      })
+    )
+  )
+
+  logger.info(
+    ` using path: ${io.opts.path} , allow origin: ${io.opts.cors.origin}`,
+    '',
+    'New socket.io instance intialized: '
+  )
+
+  io.of('/socket/').use(wrap(auth.is_active))
+
+  io.of('/socket/').use((socket, next) => {
+    if (socket.request.auth === 'rejected') {
+      logger.warn(`socket.id = ${socket.id}`, 'SOCKET REJECTED')
+      socket.emit('rejected', 'ping')
+      socket.disconnect()
+      next()
+    } else {
+      next()
     }
   })
 
@@ -108,10 +114,10 @@ exports.socketIo = (httpServer) => {
       })
 
       const sessionTouch = () => {
-        logger.debug('session.touch()')
+        logger.debug('session.touch()', 'SOCKET session.touch()')
         socket.request.session.reload((err) => {
           if (err) {
-            logger.debug(err)
+            logger.warn(err, 'SOCKET session.touch()')
             socket.emit('rejected', 'Invalid session')
             dataBase.delete_sid_uid({ sid: socket.request.session.id })
             return socket.disconnect()
@@ -140,8 +146,15 @@ exports.socketIo = (httpServer) => {
       })
 
       socket.conn.on('packet', (packet) => {
-        logger.debug(packet)
-        logger.debug(socket.request.session.id)
+        if (packet.type !== 'pong') {
+          logger.info(
+            `user.id: ${user.id}, session.id: ${
+              socket.request.session.id
+            }, packet: ${JSON.stringify(packet)}`,
+            'SOCKET packet'
+          )
+        }
+
         if (packet.type === 'pong') {
           sessionTouch()
         }
