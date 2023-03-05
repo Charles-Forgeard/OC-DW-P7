@@ -3,7 +3,6 @@ import Input from '../../Atoms/Input/Input'
 import InputPassword from '../../Atoms/Input/InputPassword.jsx'
 import FormBtn from '../../Atoms/Btn/FormBtn.jsx'
 import AlertDiv from '../../Atoms/AlertDiv.jsx'
-import useToggle from '../../../hooks/useToggle.js'
 import { SocketContext } from '../../Contexts/SocketContext'
 import ButtonClose from '../../Atoms/Btn/CloseBtn'
 import { accessControlByAdmin } from '../../../../config'
@@ -11,24 +10,20 @@ import SignUp from '../../SignUp/SignUp'
 import useModal from '../../../hooks/useModal'
 
 import { useRef, useContext, useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function UserOptionsMenu() {
   const socket = useContext(SocketContext)
+  const navigate = useNavigate()
 
-  const { info, secondLogin, confirm } = useModal()
+  const { info, secondLogin } = useModal()
 
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setconfirmNewPassword] = useState('')
 
   const [alertSpanContent, setAlertSpanContent] = useState('')
-  const [showConfirmUpdateModal, toggleShowConfirmUpdateModal] =
-    useToggle(false)
 
   const [emailInputValue, setEmailInputValue] = useState('')
-
-  const logEmail = useRef(null)
-  const logPassword = useRef(null)
   const confirmPasswordInput = useRef(null)
 
   function onKeyUpnewPasswordInput(event) {
@@ -67,11 +62,12 @@ function UserOptionsMenu() {
         stypeOption: 'danger',
       })
     }
-    const isConfirmed = await confirm({
-      title: 'Confirmation du changement de mot de passe',
-    })
+    const isValid = await secondLogin()
 
-    if (isConfirmed) updateUser()
+    if (isValid) {
+      updateUser()
+      navigate(-1)
+    }
   }
   //{toUpdate: {name, firstname, email, password, profile_picture}, login : {logEmail, logPassword}}
   function updateUser() {
@@ -130,6 +126,7 @@ function UserOptionsMenu() {
   }, [socket])
 
   function signUpCallback() {
+    navigate(-1)
     info({
       title: 'Nouveau compte utilisateur créé',
       styleOption: 'success',

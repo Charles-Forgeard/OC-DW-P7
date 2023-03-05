@@ -41,8 +41,9 @@ function UpdateMessageForm() {
 
   const textarea = useRef(null)
 
-  function onClickUpdateMsg() {
+  function onClickUpdateMsg(event) {
     if (!textarea.current.value) {
+      event.preventDefault()
       return info({
         title: 'Le post ne contient pas de texte',
         errMessage: 'Le post doit contenir du texte pour être mis à jour.',
@@ -61,6 +62,7 @@ function UpdateMessageForm() {
         files: filesToSend,
       })
     } else {
+      event.preventDefault()
       return info({
         title: 'Pas de changement détecté',
         errMessage:

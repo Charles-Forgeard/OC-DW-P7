@@ -12,13 +12,14 @@ import { host, apiPort } from '../../../../config'
 import useModal from '../../../hooks/useModal'
 
 import { useRef, useContext, useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 // Todo tester toutes les fonctions de UserOptionsMenu après l'implementation de useModal
 
 function UserOptionsMenu() {
   const user = useContext(UserContext)
   const socket = useContext(SocketContext)
+  const navigate = useNavigate()
 
   const { info, secondLogin } = useModal()
 
@@ -75,6 +76,7 @@ function UserOptionsMenu() {
     const isValid = await secondLogin()
     if (isValid) {
       updateUser()
+      navigate(-1)
     }
   }
   //{toUpdate: {name, firstname, email, password, profile_picture}, login : {logEmail, logPassword}}
