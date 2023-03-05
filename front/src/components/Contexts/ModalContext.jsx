@@ -1,6 +1,7 @@
 import { createContext, useRef } from 'react'
 
-export const defaultFunction = () => Promise.resolve(true)
+export const defaultFunction = () =>
+  Promise.resolve('default result, check if ModalContext is accessible')
 
 export const defaultNoModal = {
   infoRef: {
