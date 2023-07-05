@@ -2,21 +2,25 @@ import { accessControlByAdmin } from '../../../config'
 import Input from '../Atoms/Input/Input'
 import InputPassword from '../Atoms/Input/InputPassword'
 import ButtonPrimary from '../Atoms/Btn/PrimaryBtn'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import usePostLoginAndGoChat from '../../hooks/usePostLoginAndGoChat'
+import LoadingSpinner from '../Atoms/Spinner/LoadingSpinner'
 
 function LoginFormIndex() {
   const emailInputRef = useRef(null)
   const passwordInputRef = useRef(null)
+  const [loginReqIsLoading, setLoginReqIsLoading] = useState(false)
 
   const postLoginAndGoChat = usePostLoginAndGoChat()
 
   async function onClickConnect() {
-    postLoginAndGoChat({
+    setLoginReqIsLoading(true)
+    await postLoginAndGoChat({
       email: emailInputRef.current.value,
       password: passwordInputRef.current.value,
     })
+    setLoginReqIsLoading(false)
   }
 
   return (
@@ -40,6 +44,9 @@ function LoginFormIndex() {
         />
         <ButtonPrimary onClick={onClickConnect} className="w-100">
           Se connecter
+          {loginReqIsLoading && (
+            <LoadingSpinner className="text-white float-end" />
+          )}
         </ButtonPrimary>
         {!accessControlByAdmin && (
           <Link
