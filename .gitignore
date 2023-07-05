@@ -11,6 +11,7 @@ lerna-debug.log*
 
 front/node_modules
 back/node_modules
+back/dataBase/db.sqlite
 node_modules
 dist
 dist-ssr
