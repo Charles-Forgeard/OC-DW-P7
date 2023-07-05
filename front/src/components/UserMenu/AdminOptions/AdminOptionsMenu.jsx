@@ -17,6 +17,7 @@ function UserOptionsMenu() {
   const navigate = useNavigate()
 
   const { info, secondLogin } = useModal()
+  const { info, secondLogin } = useModal()
 
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setconfirmNewPassword] = useState('')

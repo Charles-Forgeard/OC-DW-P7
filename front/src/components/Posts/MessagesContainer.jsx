@@ -11,7 +11,7 @@ function MessagesContainer({ state, dispatch, dispatchModalState }) {
   const { info } = useModal()
 
   useEffect(() => {
-    socket.on('msg:create', ({ status, message, initBy, errMessage }) => {
+    socket.on('msg:create', async ({ status, message, initBy, errMessage }) => {
       console.log('socket.on msg:create', {
         status,
         message,
@@ -20,11 +20,12 @@ function MessagesContainer({ state, dispatch, dispatchModalState }) {
       })
       if (!errMessage) dispatch({ type: 'addMessage', payload: message })
       if (initBy === user.id && errMessage)
-        info({
+        await info({
           title: 'Echec création du post',
           errMessage: `${errMessage}. Si le problème persiste, merci de contacter l'administrateur.`,
           styleOption: 'danger',
         })
+      console.log('await')
     })
     return () => socket.off('msg:create')
   }, [socket, dispatch, user.id])

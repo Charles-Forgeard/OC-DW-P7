@@ -19,6 +19,12 @@ app.use(
   })
 )
 
+logger.info(
+  `AccessControlAllowOrigin: ${config.AccessControlAllowOrigin}`,
+  '',
+  'Express.js app: '
+)
+
 app.use((req, res, next) => {
   logger.info(
     `${req.headers.referer} IP= ${req.ip} => ${req.headers.host}${req.path} ${req.method}`,

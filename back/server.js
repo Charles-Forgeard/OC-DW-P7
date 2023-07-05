@@ -9,13 +9,7 @@ const httpServer = createServer(app)
 socketIo(httpServer)
 
 httpServer.on('listening', () => {
-  logger.info(
-    `listening on port ${config.apiPort}`,
-    'HTTPSERVER',
-    undefined,
-    this
-  )
+  logger.info(`listening on port ${config.apiPort}`, '', 'HTTP Server: ')
 })
 
 httpServer.listen(config.apiPort)
-// httpServer.listen(3000, 0.0.0.0)

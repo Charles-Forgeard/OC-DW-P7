@@ -36,7 +36,7 @@ export const GetUserContext = ({ children }) => {
     return () => {
       socket.off('rejected')
     }
-  }, [socket])
+  }, [socket, info])
 
   useEffect(() => {
     socket.on('user_def', async (user) => {

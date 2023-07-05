@@ -7,7 +7,7 @@ exports.env = process.env.NODE_ENV
 
 let apiPort, frontPort, host, AccessControlAllowOrigin
 
-logger.info(`ENV: ${process.env.NODE_ENV}`)
+logger.info(process.env.NODE_ENV, '', 'ENV: ')
 
 if (process.env.NODE_ENV === 'development') {
   apiPort = 3000

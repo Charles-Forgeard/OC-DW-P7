@@ -6,7 +6,7 @@ exports.is_active = (req, res, next) => {
       ? Object.keys(req._query)?.includes('EIO')
       : false
 
-  logger.info(
+  logger.debug(
     `isInSocketContext: ${isInSocketContext} / session.user.is_active: ${
       req.session?.user?.is_active ? true : false
     }`,
@@ -15,8 +15,8 @@ exports.is_active = (req, res, next) => {
   // logger.warn(req.socket?.parser, 'SOCKET CONTEXT')
   if (!req.session?.user?.is_active) {
     logger.warn(
-      `ACCESS DENIED: req.session.user = ${req.session?.user} & user.is_active = ${req.session?.user?.is_active}`,
-      'AUTH'
+      `ACCESS DENIED: req.session.user = ${req.session?.user} & user.is_active = ${req.session?.user?.is_active}, isInSocketContext: ${isInSocketContext}`,
+      'AUTH is_active'
     )
     if (isInSocketContext) {
       req.auth = 'rejected'
