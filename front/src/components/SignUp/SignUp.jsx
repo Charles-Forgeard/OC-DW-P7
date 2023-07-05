@@ -5,12 +5,14 @@ import { useRef, useState, useEffect } from 'react'
 import { postRegister } from '../../api/MsgAPI'
 import AlertDiv from '../Atoms/AlertDiv'
 import useModal from '../../hooks/useModal'
+import LoadingSpinnerInBtn from '../Atoms/Spinner/LoadingSpinnerInBtn'
 
 const SignUp = ({ children, callback, beforeSignUp }) => {
   const emailInputRegisterRef = useRef(null)
   const [newPassword, setNewPassword] = useState('')
   const [alertSpanContent, setAlertSpanContent] = useState('')
   const [confirmNewPassword, setconfirmNewPassword] = useState('')
+  const [signUpReqIsLoading, setSignUpReqIsLoading] = useState(false)
 
   const { info } = useModal()
 
@@ -26,7 +28,7 @@ const SignUp = ({ children, callback, beforeSignUp }) => {
 
   async function onClickSignUp(event) {
     event.preventDefault()
-    console.log('click')
+    setSignUpReqIsLoading(true)
     if (beforeSignUp) {
       console.log('beforeSignUp')
       const result = await beforeSignUp()
@@ -55,10 +57,11 @@ const SignUp = ({ children, callback, beforeSignUp }) => {
       })
     }
 
-    callback({
+    await callback({
       email: emailInputRegisterRef.current.value,
       password: newPassword,
     })
+    setSignUpReqIsLoading(false)
   }
 
   useEffect(() => {
@@ -105,6 +108,7 @@ const SignUp = ({ children, callback, beforeSignUp }) => {
       {alertSpanContent && <AlertDiv>{alertSpanContent}</AlertDiv>}
       <ButtonPrimary className="w-100" onClick={onClickSignUp}>
         Créer un nouveau compte
+        {signUpReqIsLoading && <LoadingSpinnerInBtn />}
       </ButtonPrimary>
       {children}
     </>
