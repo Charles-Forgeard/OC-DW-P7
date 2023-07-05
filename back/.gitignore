@@ -30,3 +30,5 @@ node_modules
 
 #secrets params
 .env
+
+dataBase/db.sqlite

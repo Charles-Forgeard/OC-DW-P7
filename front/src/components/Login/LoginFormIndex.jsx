@@ -5,7 +5,7 @@ import ButtonPrimary from '../Atoms/Btn/PrimaryBtn'
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import usePostLoginAndGoChat from '../../hooks/usePostLoginAndGoChat'
-import LoadingSpinner from '../Atoms/Spinner/LoadingSpinner'
+import LoadingSpinnerInBtn from '../Atoms/Spinner/LoadingSpinnerInBtn'
 
 function LoginFormIndex() {
   const emailInputRef = useRef(null)
@@ -44,9 +44,7 @@ function LoginFormIndex() {
         />
         <ButtonPrimary onClick={onClickConnect} className="w-100">
           Se connecter
-          {loginReqIsLoading && (
-            <LoadingSpinner className="text-white float-end" />
-          )}
+          {loginReqIsLoading && <LoadingSpinnerInBtn />}
         </ButtonPrimary>
         {!accessControlByAdmin && (
           <Link
