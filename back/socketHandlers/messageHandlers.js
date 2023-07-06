@@ -1,6 +1,7 @@
 const logger = require('../modules/logger/console-dev')
 const dataBase = require('../dataBase/dataBase')
 const { writeFile, deleteFile } = require('../modules/writeFile/writeFile')
+const optiImg = require('../modules/optiImg/optiImg')
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',
@@ -16,7 +17,13 @@ async function writePictureInDB(postId, pictureFilesArray) {
   for (const file of pictureFilesArray) {
     const timeStamp = Date.now()
     const fileName = file.name.split('.').slice(0, -1).join('.')
-    const typeMime = MIME_TYPES[file.type]
+    let typeMime = MIME_TYPES[file.type]
+    logger.debug(`optiImg.isEnabled= ${optiImg.isEnabled}`)
+    if (optiImg.isEnabled) {
+      const optimizedImg = await optiImg.optimise(file.buffer)
+      file.buffer = optimizedImg.buffer
+      typeMime = optimizedImg.extension
+    }
     const completeFileName = `${fileName}${timeStamp}.${typeMime}`
     const completeUrl = `img/messages/${completeFileName}`
     promises.push(

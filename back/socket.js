@@ -146,14 +146,14 @@ exports.socketIo = (httpServer) => {
       })
 
       socket.conn.on('packet', (packet) => {
-        if (packet.type !== 'pong') {
-          logger.info(
-            `user.id: ${user.id}, session.id: ${
-              socket.request.session.id
-            }, packet: ${JSON.stringify(packet)}`,
-            'SOCKET packet'
-          )
-        }
+        // if (packet.type !== 'pong') {
+        //   logger.info(
+        //     `user.id: ${user.id}, session.id: ${
+        //       socket.request.session.id
+        //     }, packet: ${JSON.stringify(packet)}`,
+        //     'SOCKET packet'
+        //   )
+        // }
 
         if (packet.type === 'pong') {
           sessionTouch()

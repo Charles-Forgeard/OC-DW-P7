@@ -35,3 +35,5 @@ exports.crypt = {
   emailInDB: process.env.CRYPT_EMAIL,
   passwordInDB: true,
 }
+
+exports.tinypngApiKey = process.env.TINYPNG_API_KEY
