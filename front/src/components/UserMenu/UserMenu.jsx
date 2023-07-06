@@ -5,6 +5,7 @@ import onClickOutside from '../../hooks/useClickOutSide'
 import { host, apiPort } from '../../../config'
 import { useContext, createRef, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import Picture from '../Atoms/Picture/Picture.jsx'
 
 function UserMenu() {
   const socket = useContext(SocketContext)
@@ -79,21 +80,17 @@ function UserMenu() {
         aria-label="Paramètres Utilisateur"
         aria-expanded={showMenu}
       >
-        <picture
-          className="avatar-picture d-block"
+        <Picture
           style={{ height: '64px', width: '64px' }}
-        >
-          <img
-            aria-hidden={true}
-            className="d-block w-100 h-100 object-fit-contain rounded-1"
-            src={
-              user.profile_picture_url === 'default_url_avatar_picture'
-                ? '../img/person.svg'
-                : `${host}:${apiPort}/private/${user.profile_picture_url}`
-            }
-            alt={`${user.firstname} ${user.name} picture id`}
-          />
-        </picture>
+          ariaHidden={true}
+          className="d-block object-fit-contain rounded-1"
+          url={
+            user.profile_picture_url === 'default_url_avatar_picture'
+              ? '../img/person.svg'
+              : `${host}:${apiPort}/private/${user.profile_picture_url}`
+          }
+          altText={`${user.firstname} ${user.name} picture id`}
+        />
       </button>
 
       {showMenu && (

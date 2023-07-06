@@ -105,7 +105,6 @@ module.exports = (io, socket) => {
       `New msg sent: {text_content: ${text_content}, files: ${files}} by user ${user.id} on socket ${socket.id}`,
       'SOCKET'
     )
-    logger.debug(user)
     try {
       if (!text_content || text_content === '') throw new Error('text empty')
 
