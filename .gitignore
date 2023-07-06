@@ -31,3 +31,4 @@ back/.env
 *.njsproj
 *.sln
 *.sw?
+back/dataBase/db.sqlite
