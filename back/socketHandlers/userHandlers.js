@@ -5,6 +5,7 @@ const argon2 = require('../modules/crypt/generate-verify-hash')
 const { writeFile, deleteFile } = require('../modules/writeFile/writeFile')
 const { cipher } = require('../modules/crypt/cryptID')
 const login = require('../modules/login/login')
+const optiImg = require('../modules/optiImg/optiImg')
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',
@@ -97,15 +98,19 @@ module.exports = (io, socket) => {
       const promises = []
       if (profile_picture) {
         if (sessionUser.profile_picture_url !== 'default_url_avatar_picture') {
-          promises.push(
-            deleteFile(`private/${sessionUser.profile_picture_url}`)
-          )
+          await deleteFile(`private/${sessionUser.profile_picture_url}`)
         }
-        promises.push(
-          writeFile(
-            `private/${formatUrlPicture(profile_picture, timeStamp)}`,
-            profile_picture.buffer
-          )
+        if (optiImg.isEnabled) {
+          const optimizedImg = await optiImg.optimise(profile_picture.buffer)
+          profile_picture.name =
+            profile_picture.name.split('.').slice(0, -1).join('.') +
+            '.' +
+            optimizedImg.extension
+          profile_picture.buffer = optimizedImg.buffer
+        }
+        await writeFile(
+          `private/${formatUrlPicture(profile_picture, timeStamp)}`,
+          profile_picture.buffer
         )
       }
 
@@ -121,9 +126,9 @@ module.exports = (io, socket) => {
         is_active: inactivateAccount ? 0 : 1,
       }
 
-      promises.push(dataBase.update(allUpdates, 'user'))
+      await dataBase.update(allUpdates, 'user')
 
-      await Promise.all(promises)
+      // await Promise.all(promises)
 
       logger.info('success', 'SOCKET ON user:update')
       socket.emit('user:update', { status: 204 })

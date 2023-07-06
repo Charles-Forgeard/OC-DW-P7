@@ -30,6 +30,7 @@
     "nodemon": "^2.0.20",
     "socket.io": "^4.6.0",
     "sqlite3": "^5.1.4",
+    "tinify": "^1.7.1",
     "validator": "^13.9.0"
   },
   "devDependencies": {
