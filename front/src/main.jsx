@@ -11,7 +11,6 @@ import ToggleLink from './components/Atoms/Router/ToggleLink'
 import CreatePostForm from './components/Posts/CreatePost/CreateMessageForm'
 import UpdatePostForm from './components/Posts/UpdatePost/UpdatePostForm'
 import UserOptionsMenu from './components/UserMenu/UserOptions/UserOptionsMenu'
-import AdminOptionsMenu from './components/UserMenu/AdminOptions/AdminOptionsMenu'
 import { GetUserContext } from './components/Contexts/UserContext'
 import { ProvideModalContext } from './components/Contexts/ModalContext'
 import DisplayModals from './components/Modal/DisplayModals'
@@ -58,7 +57,6 @@ const router = createBrowserRouter([
       { path: 'createPost', element: <CreatePostForm /> },
       { path: 'updatePost', element: <UpdatePostForm /> },
       { path: 'user', element: <UserOptionsMenu /> },
-      { path: 'admin', element: <AdminOptionsMenu /> },
     ],
   },
 ])
