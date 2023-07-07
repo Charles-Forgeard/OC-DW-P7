@@ -1,7 +1,6 @@
 import UserOptionsMenuItem from '../UserMenuItem'
 import Input from '../../Atoms/Input/Input'
 import InputPassword from '../../Atoms/Input/InputPassword.jsx'
-import FormBtn from '../../Atoms/Btn/FormBtn.jsx'
 import { UserContext } from '../../Contexts/UserContext.jsx'
 import AlertDiv from '../../Atoms/AlertDiv.jsx'
 import { SocketContext } from '../../Contexts/SocketContext'
@@ -36,6 +35,7 @@ function UserOptionsMenu() {
 
   const [fileToSend, setFileToSend] = useState(null)
   const [pictureCompInView, setPictureInView] = useState(null)
+  const [deleteProfilePicture, setDeleteProfilePicture] = useState(false)
 
   function onKeyUpnewPasswordInput(event) {
     event.preventDefault()
@@ -89,6 +89,7 @@ function UserOptionsMenu() {
         newEmail: newEmailInput?.current?.value,
         email: emailInputValue,
         profile_picture: fileToSend,
+        delete_profile_picture: deleteProfilePicture,
         newPassword:
           confirmNewPassword === newPassword ? newPassword : undefined,
       },
@@ -140,10 +141,21 @@ function UserOptionsMenu() {
 
   return (
     <div
-      className="rounded position-relative bg-white shadow-lg p-3 mb-5 mt-3 overflow-scroll"
+      className="rounded position-relative bg-white shadow-lg p-3 mb-5 mt-3 pt-0 overflow-scroll"
       style={{ maxHeight: '70vh', resize: 'both' }}
     >
-      <h3>Paramètres utilisateurs</h3>
+      <div className="d-flex align-items-center gap-2 sticky-top bg-white pt-3 pb-2 border-bottom border-tertiary border-2">
+        <h3 className="m-0 flex-grow-1">Paramètres utilisateurs</h3>
+        <button
+          onClick={onClickShowConfirmModal}
+          className="btn btn-tertiary text-secondary mt-0 fw-bold"
+        >
+          Mise à jour
+        </button>
+        <Link to="..">
+          <ButtonClose />
+        </Link>
+      </div>
       {user.is_admin && (
         <Input
           id="userEmailToInactivateInput"
@@ -155,8 +167,7 @@ function UserOptionsMenu() {
       )}
       <ul className="list-unstyled mb-0 pe-5 mb-3 d-flex flex-column gap-3">
         <UserOptionsMenuItem
-          title="Réinitialiser mot de passe"
-          onSubmit={onClickShowConfirmModal}
+          title={`${user.is_admin ? 'Réinitialiser' : 'Changer'} mot de passe`}
           autoFocus={true}
         >
           <InputPassword
@@ -174,15 +185,9 @@ function UserOptionsMenu() {
             onBlur={onBlurCheckPasswordInputs}
           />
           {alertSpanContent && <AlertDiv>{alertSpanContent}</AlertDiv>}
-          <FormBtn type="submit" className="mt-3">
-            Mise à jour
-          </FormBtn>
         </UserOptionsMenuItem>
 
-        <UserOptionsMenuItem
-          title="Profil utilisateur"
-          onSubmit={onClickShowConfirmModal}
-        >
+        <UserOptionsMenuItem title="Changer patronyme">
           <Input
             refInput={nameInput}
             type="text"
@@ -195,36 +200,37 @@ function UserOptionsMenu() {
             placeholder="prénom"
             label="Prénom"
           />
+        </UserOptionsMenuItem>
+        <UserOptionsMenuItem title="Changer email">
           <Input
             refInput={newEmailInput}
             type="email"
             placeholder="name@example.com"
             label="Email"
           />
+        </UserOptionsMenuItem>
+        <UserOptionsMenuItem title="Changer photo de profil">
           <InputUserPicture
             setFileToSend={setFileToSend}
             setPictureInView={setPictureInView}
+            setDeleteProfilePicture={setDeleteProfilePicture}
+            deleteProfilePicture={deleteProfilePicture}
             label={`Photo de profil`}
           />
           {pictureCompInView ?? (
             <Picture
               url={
                 user.profile_picture_url === 'default_url_avatar_picture' ||
-                user.is_admin
+                user.is_admin ||
+                deleteProfilePicture
                   ? '../img/person.svg'
                   : `${host}:${apiPort}/private/${user.profile_picture_url}`
               }
               style={{ width: '100px', height: '100px' }}
             />
           )}
-          <FormBtn type="submit" className="d-block mt-3">
-            Mise à jour
-          </FormBtn>
         </UserOptionsMenuItem>
       </ul>
-      <Link to="..">
-        <ButtonClose />
-      </Link>
     </div>
   )
 }

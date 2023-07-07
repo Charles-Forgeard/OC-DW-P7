@@ -1,9 +1,29 @@
-import { Fragment, useRef } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import AddPictureSvg from '../Icons/AddPictureSvg'
+import DeletePictureSvg from '../Icons/DeletePictureSvg'
 import PictureLink from '../Picture/PictureLink'
+import TertiaryBtn from '../Btn/TertiaryBtn'
 
-function InputFilePicture({ setFileToSend, setPictureInView, label }) {
+function InputFilePicture({
+  setFileToSend,
+  setPictureInView,
+  setDeleteProfilePicture,
+  label,
+  deleteProfilePicture,
+}) {
   const imgInput = useRef(null)
+
+  function onClickRemoveInputFile(event) {
+    event.preventDefault()
+    setFileToSend(null)
+    setPictureInView(null)
+    imgInput.current.files = new DataTransfer().files
+  }
+
+  function onClickDeleteProfilePicture(event) {
+    onClickRemoveInputFile(event)
+    setDeleteProfilePicture((boolean) => !boolean)
+  }
 
   async function onChangeInput(event) {
     event.preventDefault()
@@ -24,33 +44,28 @@ function InputFilePicture({ setFileToSend, setPictureInView, label }) {
 
       setFileToSend(customFile)
 
-      async function onClickRemoveInputFile(event) {
-        event.preventDefault()
-        setFileToSend(null)
-        setPictureInView(null)
-        imgInput.current.files = new DataTransfer().files
-      }
-
       const pictureComp = (
         <PictureLink
           url={URL.createObjectURL(file)}
           onClick={onClickRemoveInputFile}
         />
       )
-      // const img = document.createElement('img')
-      // img.className = 'imgPreview'
-      //img.src = URL.createObjectURL(file)
 
-      setPictureInView((picturesInView) => pictureComp)
+      setPictureInView(pictureComp)
     }
   }
 
   return (
     <Fragment>
-      <label htmlFor="imgFileInput" className="d-block">
-        {label}
+      <TertiaryBtn
+        className="d-block my-2"
+        onClick={() => {
+          imgInput.current.click()
+        }}
+      >
         <AddPictureSvg />
-      </label>
+        Télécharger un nouveau portrait
+      </TertiaryBtn>
       <input
         id="imgFileInput"
         ref={imgInput}
@@ -60,6 +75,15 @@ function InputFilePicture({ setFileToSend, setPictureInView, label }) {
         multiple={false}
         accept="image/jpeg,image/png,image/svg+xml,image/webp,image/avif"
       ></input>
+      <TertiaryBtn
+        className={`d-block my-2 ${
+          deleteProfilePicture ? 'btn-danger text-white' : ''
+        }`}
+        onClick={onClickDeleteProfilePicture}
+      >
+        <DeletePictureSvg />
+        {deleteProfilePicture ? 'Annuler suppression' : 'Supprimer portrait'}
+      </TertiaryBtn>
     </Fragment>
   )
 }

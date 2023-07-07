@@ -20,7 +20,9 @@ function Picture({ url, altText, formats, id, className, style, ariaHidden }) {
   return (
     <>
       <picture
-        className={`d-flex position-relative justify-content-center align-items-center ${className}`}
+        className={`d-flex position-relative justify-content-center align-items-center ${
+          className ?? ''
+        }`}
         style={style}
       >
         {formats}

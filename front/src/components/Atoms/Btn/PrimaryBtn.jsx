@@ -14,7 +14,7 @@ function ButtonPrimary({
   type = type ?? 'button'
   return (
     <button
-      className={`btn btn-primary fw-bold mt-3 text-white ${className}`}
+      className={`btn btn-primary fw-bold mt-3 text-white ${className ?? ''}`}
       style={style}
       ref={buttonRef}
       type={type}

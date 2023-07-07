@@ -57,6 +57,7 @@ module.exports = (io, socket) => {
       newEmail,
       newPassword,
       profile_picture,
+      delete_profile_picture,
     },
   }) => {
     logger.info(
@@ -115,6 +116,15 @@ module.exports = (io, socket) => {
           profile_picture.buffer
         )
       }
+
+      let profile_picture_url = null
+      if (profile_picture)
+        profile_picture_url = formatUrlPicture(profile_picture, timeStamp)
+      if (delete_profile_picture) {
+        profile_picture_url = 'default_url_avatar_picture'
+        await deleteFile(`private/${userToUpdate.profile_picture_url}`)
+      }
+
       logger.warn(`userToUpdate.email = ${userToUpdate.email}`)
       logger.warn(`newEmail = ${newEmail}`)
       const allUpdates = {
@@ -123,9 +133,7 @@ module.exports = (io, socket) => {
         firstname: firstname,
         email: newEmail !== '' ? newEmail : userToUpdate.email,
         password: newPassword,
-        profile_picture_url: profile_picture
-          ? formatUrlPicture(profile_picture, timeStamp)
-          : null,
+        profile_picture_url: profile_picture_url,
         is_active: inactivateAccount ? 0 : 1,
       }
 

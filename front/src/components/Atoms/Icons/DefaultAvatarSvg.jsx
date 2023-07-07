@@ -5,7 +5,7 @@ function DefaultAvatarSVG({ style, className }) {
       height="32"
       viewBox="0 0 16 16"
       style={style}
-      className={className}
+      className={className ?? ''}
     >
       <g fill="currentColor">
         <path d="M11 6a3 3 0 1 1-6 0a3 3 0 0 1 6 0z" />

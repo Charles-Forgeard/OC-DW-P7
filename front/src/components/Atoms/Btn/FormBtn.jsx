@@ -4,7 +4,7 @@ function FormBtn({ type, children, onClick, className }) {
     <button
       type={type}
       onClick={onClick}
-      className={`btn btn-tertiary text-secondary fw-bold ${className}`}
+      className={`btn btn-tertiary text-secondary fw-bold ${className ?? ''}`}
     >
       {children}
     </button>

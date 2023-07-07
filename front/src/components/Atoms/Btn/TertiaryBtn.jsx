@@ -11,7 +11,9 @@ function ButtonTertiary({
   return (
     <button
       type={type}
-      className={`btn btn-tertiary text-secondary mt-3 fw-bold ${className}`}
+      className={`btn btn-tertiary text-secondary mt-3 fw-bold ${
+        className ?? ''
+      }`}
       onClick={onClick}
       autoFocus={isAutoFocus}
       aria-label={ariaLabel}

@@ -1,7 +1,9 @@
 function LoadingSpinner({ className, size, sizeUnit }) {
   return (
     <div
-      className={`text-primary spinner-border spinner-border-sm ${className}`}
+      className={`text-primary spinner-border spinner-border-sm ${
+        className ?? ''
+      }`}
       role="status"
       aria-hidden="true"
       style={{
