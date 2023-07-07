@@ -34,6 +34,7 @@ const sql_post = `SELECT * FROM post WHERE id = ?`
 const sql_users = `SELECT * FROM user`
 const sql_Post_Images = `SELECT * FROM picture WHERE post_id = ?`
 const sql_get_sid_uid = `SELECT * FROM sid_uid WHERE uid = ?`
+const sql_get_session = `SELECT * FROM sessions WHERE sid = ?`
 const sql_insert_user = `INSERT INTO user (
     email,
     profile_picture_url,
@@ -378,4 +379,13 @@ exports.delete_session = ({ sid }) => {
 exports.clear_sessions = () => {
   const date = Date.now()
   return DB_Delete(sql_delete_expired_sessions, [date])
+}
+
+exports.update_session_user = async ({ sid, user }) => {
+  const session = await DB_Get(sql_get_session, [sid])
+  let sess = JSON.parse(session.sess)
+  sess.user = user
+  sess = JSON.stringify(sess)
+  const sql_update_session = `UPDATE sessions SET sess = ? WHERE sid = ?`
+  return DB_Update(sql_update_session, [sess, sid])
 }

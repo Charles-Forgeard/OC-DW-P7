@@ -144,21 +144,21 @@ function UserOptionsMenu() {
       style={{ maxHeight: '70vh', resize: 'both' }}
     >
       <h3>Paramètres utilisateurs</h3>
+      {user.is_admin && (
+        <Input
+          id="userEmailToInactivateInput"
+          type="email"
+          placeholder="name@example.com"
+          label="Email du compte à modifier"
+          onKeyUp={onKeyUpInputEmailValue}
+        />
+      )}
       <ul className="list-unstyled mb-0 pe-5 mb-3 d-flex flex-column gap-3">
         <UserOptionsMenuItem
           title="Réinitialiser mot de passe"
           onSubmit={onClickShowConfirmModal}
           autoFocus={true}
         >
-          {user.is_admin && (
-            <Input
-              id="userEmailToInactivateInput"
-              type="email"
-              placeholder="name@example.com"
-              label="Email de l'utilisateur"
-              onKeyUp={onKeyUpInputEmailValue}
-            />
-          )}
           <InputPassword
             type="password"
             placeholder="new password"
@@ -204,12 +204,13 @@ function UserOptionsMenu() {
           <InputUserPicture
             setFileToSend={setFileToSend}
             setPictureInView={setPictureInView}
-            label="Photo de profil"
+            label={`Photo de profil`}
           />
           {pictureCompInView ?? (
             <Picture
               url={
-                user.profile_picture_url === 'default_url_avatar_picture'
+                user.profile_picture_url === 'default_url_avatar_picture' ||
+                user.is_admin
                   ? '../img/person.svg'
                   : `${host}:${apiPort}/private/${user.profile_picture_url}`
               }

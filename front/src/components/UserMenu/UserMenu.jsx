@@ -103,7 +103,7 @@ function UserMenu() {
         >
           <li className="dropdown-item" role="presentation">
             <Link
-              to={user.is_admin ? 'admin' : 'user'}
+              to="user"
               role="menuitem"
               onClick={onClickToggleUserOptionsMenu}
               ref={firstItem}

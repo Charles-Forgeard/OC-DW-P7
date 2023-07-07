@@ -78,12 +78,14 @@ module.exports = (io, socket) => {
 
       let userToUpdate = {}
 
-      if (!email) {
+      if (!email || email === sessionUser.email) {
         userToUpdate = { ...sessionUser }
       } else if (config.crypt.emailInDB && email) {
-        userToUpdate.email = await cipher(config.crypt.emailInDB, email)
+        userToUpdate = await dataBase.getUser({
+          email: await cipher(config.crypt.emailInDB, email),
+        })
       } else {
-        userToUpdate.email = email
+        userToUpdate = await dataBase.getUser({ email: email })
       }
 
       if (
@@ -94,11 +96,11 @@ module.exports = (io, socket) => {
       }
 
       const timeStamp = Date.now()
-
+      logger.warn(`userToUpdate= ${userToUpdate}`)
       const promises = []
       if (profile_picture) {
-        if (sessionUser.profile_picture_url !== 'default_url_avatar_picture') {
-          await deleteFile(`private/${sessionUser.profile_picture_url}`)
+        if (userToUpdate.profile_picture_url !== 'default_url_avatar_picture') {
+          await deleteFile(`private/${userToUpdate.profile_picture_url}`)
         }
         if (optiImg.isEnabled) {
           const optimizedImg = await optiImg.optimise(profile_picture.buffer)
@@ -113,12 +115,13 @@ module.exports = (io, socket) => {
           profile_picture.buffer
         )
       }
-
+      logger.warn(`userToUpdate.email = ${userToUpdate.email}`)
+      logger.warn(`newEmail = ${newEmail}`)
       const allUpdates = {
         id: userToUpdate.id,
         name: name,
         firstname: firstname,
-        email: newEmail ?? userToUpdate.email,
+        email: newEmail !== '' ? newEmail : userToUpdate.email,
         password: newPassword,
         profile_picture_url: profile_picture
           ? formatUrlPicture(profile_picture, timeStamp)
@@ -143,27 +146,28 @@ module.exports = (io, socket) => {
       }
 
       if (allUpdates.profile_picture_url === null) {
-        allUpdates.profile_picture_url = sessionUser.profile_picture_url
+        allUpdates.profile_picture_url = userToUpdate.profile_picture_url
       }
 
-      const userUpdated = { ...sessionUser, ...allUpdates }
+      const userUpdated = { ...userToUpdate, ...allUpdates }
 
       logger.info(userUpdated)
 
-      socket.request.session.reload((err) => {
-        if (err) {
-          return socket.disconnect()
-        }
-        socket.request.session.user = userUpdated
-        socket.request.session.save()
+      const sessionToUpdate = await dataBase.get_sid_uid({
+        uid: userUpdated.id,
       })
 
-      const safeUserInfo = { ...userUpdated }
-      delete safeUserInfo.password
-      delete safeUserInfo.is_active
-      delete safeUserInfo.email
-
-      socket.emit('user_def', safeUserInfo)
+      if (sessionToUpdate) {
+        await dataBase.update_session_user({
+          sid: sessionToUpdate.sid,
+          user: userUpdated,
+        })
+        const safeUserInfo = { ...userUpdated }
+        delete safeUserInfo.password
+        delete safeUserInfo.is_active
+        delete safeUserInfo.email
+        socket.emit('user_def', safeUserInfo)
+      }
     } catch (err) {
       if (err.message === 'user unknown' || err.message === 'bad password') {
         logger.warn(err, 'SOCKET login for update user account')
