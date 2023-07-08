@@ -122,7 +122,8 @@ module.exports = (io, socket) => {
         profile_picture_url = formatUrlPicture(profile_picture, timeStamp)
       if (delete_profile_picture) {
         profile_picture_url = 'default_url_avatar_picture'
-        await deleteFile(`private/${userToUpdate.profile_picture_url}`)
+        if (userToUpdate.profile_picture_url !== 'default_url_avatar_picture')
+          await deleteFile(`private/${userToUpdate.profile_picture_url}`)
       }
 
       logger.warn(`userToUpdate.email = ${userToUpdate.email}`)
